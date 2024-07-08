@@ -60,13 +60,13 @@ readFile(path + 'public/pages/navbar.html', 'utf-8', (err, content) => {
 app.get('/posts', async (req, res) => {
     returnPage(req, res, 'posts.html', 'Posts');
 });
-app.get('/post/:id', async (req, res) => {
+app.get('/posts/:id', async (req, res) => {
     returnPage(req, res, 'single-post.html', 'Post', {id: req.params.id});
 });
 app.get('/api/posts', async (req, res) => {
     res.send(await getAllPosts());
 });
-app.get('/api/post/:id', async (req, res) => {
+app.get('/api/posts/:id', async (req, res) => {
     res.send(await getPost(req.params.id));
 });
 

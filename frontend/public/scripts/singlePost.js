@@ -4,7 +4,7 @@ const body = document.querySelector('body');
 
 async function getPost(id) {
     try {
-        const response = await fetch(`/api/post/${id}`);
+        const response = await fetch(`/api/posts/${id}`);
 
         if (!response.ok) {
             throw new Error(response.status);
