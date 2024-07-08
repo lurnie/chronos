@@ -27,6 +27,7 @@ function addHTMLBoilerplate(html, title, parameters) {
         <link rel='stylesheet' href='../styles/main.css'>
     </head>
     <body>
+        ${navbar}
         ${html}
     </body>
     </html>
@@ -46,6 +47,15 @@ async function returnPage(req, res, src, title=defaultTitle, parameters) {
         }
     })
 }
+
+let navbar;
+readFile(path + 'public/pages/navbar.html', 'utf-8', (err, content) => {
+    if (err) {
+        navbar = '';
+    } else {
+        navbar = content;
+    }
+});
 
 app.get('/posts', async (req, res) => {
     returnPage(req, res, 'posts.html', 'Posts');
