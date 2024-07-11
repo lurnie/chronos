@@ -18,4 +18,29 @@ getPosts().then((posts) => {
         let postElement = createPostElement(post.contents, post.date_created);
         body.appendChild(postElement);
     }
-})
+});
+
+const sendButton = document.querySelector('#send-button');
+const userInput = document.querySelector('#post-user-input');
+const inputPost = document.querySelector('#post-send-box');
+
+sendButton.addEventListener('click', async () => {
+    if (userInput.textContent === '') {
+        return;
+    }
+    const response = await fetch('/posts', {
+        method: 'POST',
+        body: JSON.stringify({
+            contents: userInput.textContent
+        }),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+        }
+    });
+    if (response.ok) {
+        let json = await response.json();
+        let postElement = createPostElement(json.contents, json.date_created);
+        body.insertBefore(postElement, inputPost.nextSibling);
+        userInput.textContent = '';
+    }
+});

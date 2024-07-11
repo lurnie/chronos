@@ -13,6 +13,8 @@ import { getAllPosts, getPost, createPost } from './database.js';
 
 app.use(express.static(path + 'public'));
 
+app.use(express.json());
+
 function addHTMLBoilerplate(html, title, parameters) {
     // TODO: do this in a better way or replace this completely?
 
@@ -63,6 +65,15 @@ app.get('/posts', async (req, res) => {
 app.get('/posts/:id', async (req, res) => {
     returnPage(req, res, 'single-post.html', 'Post', {id: req.params.id});
 });
+app.post('/posts', async (req, res) => {
+    const {contents} = req.body;
+    let result = await createPost(contents);
+    if (result === 400) {
+        res.status(400).send('Unable to create note.');
+    } else {
+        res.status(200).send(result);
+    }
+})
 app.get('/api/posts', async (req, res) => {
     res.send(await getAllPosts());
 });

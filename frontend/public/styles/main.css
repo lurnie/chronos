@@ -25,11 +25,29 @@ h1 {
     display: block;
 }
 
+#post-send-box {
+    margin-top: 0;
+    margin-bottom: 50px;
+}
+#post-send-box:focus-within {
+    outline: solid blue 2px;
+}
+#send-button {
+
+}
+#post-user-input {
+    margin-bottom: 10px;
+}
+#post-user-input:focus {
+    outline: none;
+}
+
 .navbar {
     background-color: rgb(227, 198, 254);
     box-shadow: 0 0 3px 1px rgb(178, 101, 250);
     position: sticky;
     top: 0px;
+    font-size: 120%;
 
     ul {
         padding-left: 30px;
