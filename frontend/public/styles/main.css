@@ -24,6 +24,10 @@ h1 {
 .post-date {
     display: block;
 }
+.post-link {
+    color: inherit;
+    text-decoration: none;
+}
 
 #post-send-box {
     margin-top: 0;

@@ -24,7 +24,7 @@ getPost(params.id).then( (postData) => {
         body.innerHTML = 'Could not find post.'
         return;
     }
-    const post = createPostElement(postData.contents, postData.date_created);
+    const post = createPostElement(postData.post_id, postData.contents, postData.date_created);
 
     body.appendChild(post);
 }

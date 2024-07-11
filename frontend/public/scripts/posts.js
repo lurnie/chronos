@@ -15,7 +15,7 @@ async function getPosts() {
 
 getPosts().then((posts) => {
     for (let post of posts) {
-        let postElement = createPostElement(post.contents, post.date_created);
+        let postElement = createPostElement(post.post_id, post.contents, post.date_created, true);
         body.appendChild(postElement);
     }
 });
@@ -39,7 +39,7 @@ sendButton.addEventListener('click', async () => {
     });
     if (response.ok) {
         let json = await response.json();
-        let postElement = createPostElement(json.contents, json.date_created);
+        let postElement = createPostElement(json.post_id, json.contents, json.date_created, true);
         body.insertBefore(postElement, inputPost.nextSibling);
         userInput.textContent = '';
     }
