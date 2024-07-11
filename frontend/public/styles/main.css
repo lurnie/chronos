@@ -32,9 +32,6 @@ h1 {
 #post-send-box:focus-within {
     outline: solid blue 2px;
 }
-#send-button {
-
-}
 #post-user-input {
     margin-bottom: 10px;
 }
