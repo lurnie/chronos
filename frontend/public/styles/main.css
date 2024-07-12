@@ -29,17 +29,17 @@ h1 {
     text-decoration: none;
 }
 
-#post-send-box {
+.post.send-box {
     margin-top: 0;
     margin-bottom: 50px;
 }
-#post-send-box:focus-within {
+.post-send-box:focus-within {
     outline: solid blue 2px;
 }
-#post-user-input {
+.post-user-input {
     margin-bottom: 10px;
 }
-#post-user-input:focus {
+.post-user-input:focus {
     outline: none;
 }
 

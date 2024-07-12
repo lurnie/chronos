@@ -20,9 +20,9 @@ getPosts().then((posts) => {
     }
 });
 
-const sendButton = document.querySelector('#send-button');
-const userInput = document.querySelector('#post-user-input');
-const inputPost = document.querySelector('#post-send-box');
+const sendButton = document.querySelector('.send-button');
+const userInput = document.querySelector('.post-user-input');
+const inputPost = document.querySelector('.send-box');
 
 sendButton.addEventListener('click', async () => {
     if (userInput.textContent === '') {
