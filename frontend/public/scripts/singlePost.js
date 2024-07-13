@@ -34,7 +34,7 @@ async function getComments(postId) {
     }
 }
 
-function createReplyBox(parent, func) {
+function createReplyBox(parent, canDelete=true) {
     const box = document.createElement('div');
     box.setAttribute('class', 'reply input-box');
 
@@ -53,18 +53,61 @@ function createReplyBox(parent, func) {
         event.dataTransfer.dropEffect = 'none';
     }
 
-    const button = document.createElement('button');
-    button.setAttribute('class', 'send-button');
-    button.textContent = 'Send';
+    const sendButton = document.createElement('button');
+    sendButton.setAttribute('class', 'send-button');
+    sendButton.textContent = 'Send';
+    box.append(input, sendButton);
 
-    box.append(input, button);
 
-    func(box, input, button);
+    if (canDelete) {
+        const cancelButton = document.createElement('button');
+        cancelButton.setAttribute('class', 'cancel-button');
+        cancelButton.textContent = 'Cancel';
+
+
+        cancelButton.addEventListener('click', () => {
+            box.remove();
+        });
+        sendButton.addEventListener('click', () => {
+            box.remove();
+        })
+
+        box.appendChild(cancelButton);
+    }
+
+    sendButton.addEventListener('click', async () => {
+        if (input.textContent === '') {
+            return;
+        }
+        const userInput = input.textContent;
+        const response = await fetch(`/api/posts/${params.id}/comments`, {
+            method: 'post',
+            body: JSON.stringify({
+                contents: userInput,
+                parentId: parent
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+        if (response.ok) {
+            input.textContent = '';
+            let json = await response.json();
+            const newComment = createReplyElement(json.post_id, json.contents, json.date_created);
+            if (json.parent_comment === null) {
+                body.insertBefore(newComment, upperReplyBox.nextSibling);
+            } else {
+                const parentElement = document.querySelector(`#comment-${json.parent_comment}`).parentNode;
+                parentElement.appendChild(newComment);
+            }
+        }
+    });
+
 
     return box;
 }
 
-function createReplyElement(id, contents, timestamp, parent) {
+function createReplyElement(id, contents, timestamp) {
     const box = document.createElement('div');
     box.setAttribute('class', 'reply');
     box.setAttribute('id', `comment-${id}`);
@@ -78,6 +121,20 @@ function createReplyElement(id, contents, timestamp, parent) {
     box.append(commentContent, timestampElement);
     const outerWrapper = document.createElement('div');
     outerWrapper.appendChild(box);
+
+    const replyButton = document.createElement('span');
+    replyButton.textContent = 'Reply';
+    replyButton.setAttribute('class', 'reply-button');
+
+
+
+    replyButton.addEventListener('click', () => {
+        const replyBox = createReplyBox(id);
+        let nextSibling = box.nextSibling;
+        if (nextSibling && nextSibling.getAttribute('class') === 'reply input-box') {return;}
+        outerWrapper.insertBefore(replyBox, box.nextSibling);
+    })
+    box.appendChild(replyButton);
     return outerWrapper;
 }
 
@@ -92,34 +149,7 @@ await getPost(params.id).then( (postData) => {
     body.appendChild(post);
 });
 
-const upperReplyBox = createReplyBox(body, (box, input, button) => {
-    button.addEventListener('click', async () => {
-        if (input.textContent === '') {
-            return;
-        }
-        const userInput = input.textContent;
-        const response = await fetch(`/api/posts/${params.id}/comments`, {
-            method: 'post',
-            body: JSON.stringify({
-                contents: userInput
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            }
-        });
-        if (response.ok) {
-            input.textContent = '';
-            let json = await response.json();
-            const newComment = createReplyElement(json.post_id, json.contents, json.date_created);
-            if (json.parent_comment === null) {
-                body.insertBefore(newComment, upperReplyBox.nextSibling);
-            } else {
-                const parent = document.querySelector(`#comment-${parent.parent_comment}`).parentNode;
-                parent.appendChild(newComment);
-            }
-        }
-    })
-});
+const upperReplyBox = createReplyBox(null, false);
 body.appendChild(upperReplyBox);
 
 await getComments(params.id).then((comments) => {

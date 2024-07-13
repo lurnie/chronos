@@ -7,6 +7,14 @@ h1 {
     margin: 5px;
 }
 
+.reply-button {
+    color: blue;
+    margin-top: 40px;
+}
+.reply-button:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
 .reply {
     display: block;
     width: 50%;
