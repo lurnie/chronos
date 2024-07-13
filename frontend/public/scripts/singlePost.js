@@ -35,7 +35,9 @@ async function getComments(postId) {
 }
 
 function createReplyBox(parent, canDelete=true) {
+    const outerWrapper = document.createElement('ul');
     const box = document.createElement('div');
+    outerWrapper.appendChild(box);
     box.setAttribute('class', 'reply input-box');
 
     const input = document.createElement('div');
@@ -66,10 +68,10 @@ function createReplyBox(parent, canDelete=true) {
 
 
         cancelButton.addEventListener('click', () => {
-            box.remove();
+            outerWrapper.remove();
         });
         sendButton.addEventListener('click', () => {
-            box.remove();
+            outerWrapper.remove();
         })
 
         box.appendChild(cancelButton);
@@ -93,7 +95,7 @@ function createReplyBox(parent, canDelete=true) {
         if (response.ok) {
             input.textContent = '';
             let json = await response.json();
-            const newComment = createReplyElement(json.post_id, json.contents, json.date_created);
+            const newComment = createReplyElement(json.comment_id, json.contents, json.date_created);
             if (json.parent_comment === null) {
                 body.insertBefore(newComment, upperReplyBox.nextSibling);
             } else {
@@ -104,7 +106,7 @@ function createReplyBox(parent, canDelete=true) {
     });
 
 
-    return box;
+    return outerWrapper;
 }
 
 function createReplyElement(id, contents, timestamp) {
@@ -119,7 +121,7 @@ function createReplyElement(id, contents, timestamp) {
     timestampElement.setAttribute('class', 'post-date')
 
     box.append(commentContent, timestampElement);
-    const outerWrapper = document.createElement('div');
+    const outerWrapper = document.createElement('ul');
     outerWrapper.appendChild(box);
 
     const replyButton = document.createElement('span');
