@@ -42,6 +42,17 @@ function createReplyBox(parent, func) {
     input.setAttribute('class', 'post-user-input');
     input.setAttribute('contenteditable', 'true');
 
+    input.ondragover = (event) => {
+        // prevents the user from dragging something onto the post input
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'none';
+    }
+    input.ondragenter = (event) => {
+        // prevents the cursor from flickering when attempting to drag something into the post on some browsers
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'none';
+    }
+
     const button = document.createElement('button');
     button.setAttribute('class', 'send-button');
     button.textContent = 'Send';

@@ -24,6 +24,17 @@ const sendButton = document.querySelector('.send-button');
 const userInput = document.querySelector('.post-user-input');
 const inputPost = document.querySelector('.send-box');
 
+userInput.ondragover = (event) => {
+    // prevents the user from dragging something onto the post input
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'none';
+}
+userInput.ondragenter = (event) => {
+    // prevents the cursor from flickering when attempting to drag something into the post on some browsers
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'none';
+}
+
 sendButton.addEventListener('click', async () => {
     if (userInput.textContent === '') {
         return;
