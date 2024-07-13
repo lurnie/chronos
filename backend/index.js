@@ -65,7 +65,7 @@ app.get('/posts', async (req, res) => {
 app.get('/posts/:id', async (req, res) => {
     returnPage(req, res, 'single-post.html', 'Post', {id: req.params.id});
 });
-app.post('/posts', async (req, res) => {
+app.post('/api/posts', async (req, res) => {
     const {contents} = req.body;
     let result = await createPost(contents);
     if (result === 400) {

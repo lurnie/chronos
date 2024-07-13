@@ -28,7 +28,7 @@ sendButton.addEventListener('click', async () => {
     if (userInput.textContent === '') {
         return;
     }
-    const response = await fetch('/posts', {
+    const response = await fetch('/api/posts', {
         method: 'POST',
         body: JSON.stringify({
             contents: userInput.textContent
