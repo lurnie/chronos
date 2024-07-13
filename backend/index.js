@@ -8,7 +8,7 @@ const port = 3000;
 
 const path = '../frontend/';
 
-import { getAllPosts, getPost, createPost } from './database.js';
+import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment } from './database.js';
 
 
 app.use(express.static(path + 'public'));
@@ -74,11 +74,24 @@ app.post('/posts', async (req, res) => {
         res.status(200).send(result);
     }
 })
+
 app.get('/api/posts', async (req, res) => {
     res.send(await getAllPosts());
 });
 app.get('/api/posts/:id', async (req, res) => {
     res.send(await getPost(req.params.id));
+});
+app.get('/api/posts/:id/comments', async (req, res) => {
+    res.send(await getCommentsFromPost(req.params.id));
+});
+app.post('/api/posts/:id/comments', async (req, res) => {
+    const {contents, parentId} = req.body;
+    let result = await createComment(req.params.id, contents, parentId);
+    if (result === 400) {
+        res.status(400).send('Unable to create comment.');
+    } else {
+        res.status(200).send(result);
+    }
 });
 
 app.listen(port, () => {
