@@ -38,14 +38,14 @@ function addHTMLBoilerplate(html, title, parameters) {
 
 const defaultTitle = 'LurnSite';
 
-async function returnPage(req, res, src, title=defaultTitle, parameters) {
+async function returnPage(req, res, src, title=defaultTitle, parameters, status=200) {
     readFile(path + 'public/pages/' + src, 'utf-8', (err, content) => {
         if (err) {
             console.log(`500 Internal Server Error - failed to retrieve ${path+'public/pages/'+src}`);
             res.status(500).send('500 Internal Server Error - page could not be retrieved');
         } else {
             let html = addHTMLBoilerplate(content, title, parameters);
-            res.send(html);
+            res.status(status).send(html);
         }
     })
 }
@@ -93,6 +93,10 @@ app.post('/api/posts/:id/comments', async (req, res) => {
         res.status(200).send(result);
     }
 });
+
+app.get('*', (req, res) => {
+    returnPage(req, res, '404.html', '404 Page Not Found', undefined, 404);
+})
 
 app.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`)
