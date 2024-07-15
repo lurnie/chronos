@@ -82,13 +82,6 @@ h1 {
 
         .nav-element {
             transition-duration: 0.3s;
-
-            a {
-                padding: 16px;
-                text-decoration: none;
-                color: black;
-                display: block;
-            }
         }
 
         .nav-element:hover {
@@ -100,4 +93,13 @@ h1 {
             margin-left: auto;
         }
     }
+}
+
+.nav-link {
+    padding: 16px;
+    text-decoration: none;
+    color: black;
+    display: block;
+    user-select: none;
+    cursor: pointer;
 }

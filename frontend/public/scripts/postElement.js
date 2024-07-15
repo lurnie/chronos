@@ -1,6 +1,6 @@
 // this function gets reused by multiple files
 
-function createPostElement(id, contents, timestamp, link=false) {
+function createPostElement(id, contents, userId, timestamp, link=false) {
     const div = document.createElement('div');
 
     const contentsElement = document.createElement('span');

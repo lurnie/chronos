@@ -15,43 +15,55 @@ async function getPosts() {
 
 getPosts().then((posts) => {
     for (let post of posts) {
-        let postElement = createPostElement(post.post_id, post.contents, post.date_created, true);
+        let postElement = createPostElement(post.post_id, post.contents, post.user_id, post.date_created, true);
         body.appendChild(postElement);
     }
 });
 
-const sendButton = document.querySelector('.send-button');
-const userInput = document.querySelector('.post-user-input');
-const inputPost = document.querySelector('.send-box');
+if (params.userId) {
+    const inputPost = document.createElement('div');
+    inputPost.setAttribute('class', 'post send-box');
 
-userInput.ondragover = (event) => {
-    // prevents the user from dragging something onto the post input
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'none';
-}
-userInput.ondragenter = (event) => {
-    // prevents the cursor from flickering when attempting to drag something into the post on some browsers
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'none';
-}
+    const userInput = document.createElement('div');
+    userInput.setAttribute('class', 'post-user-input');
+    userInput.setAttribute('contenteditable', 'true');
 
-sendButton.addEventListener('click', async () => {
-    if (userInput.textContent === '') {
-        return;
+    const sendButton = document.createElement('button');
+    sendButton.setAttribute('class', 'send-button');
+    sendButton.textContent = 'Send';
+
+    inputPost.append(userInput, sendButton);
+    body.appendChild(inputPost);
+
+    userInput.ondragover = (event) => {
+        // prevents the user from dragging something onto the post input
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'none';
     }
-    const response = await fetch('/api/posts', {
-        method: 'POST',
-        body: JSON.stringify({
-            contents: userInput.textContent
-        }),
-        headers: {
-            'Content-type': 'application/json; charset=UTF-8'
+    userInput.ondragenter = (event) => {
+        // prevents the cursor from flickering when attempting to drag something into the post on some browsers
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'none';
+    }
+
+    sendButton.addEventListener('click', async () => {
+        if (userInput.textContent === '') {
+            return;
+        }
+        const response = await fetch('/api/posts', {
+            method: 'POST',
+            body: JSON.stringify({
+                contents: userInput.textContent
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+        if (response.ok) {
+            let json = await response.json();
+            let postElement = createPostElement(json.post_id, json.contents, json.user_id, json.date_created, true);
+            body.insertBefore(postElement, inputPost.nextSibling);
+            userInput.textContent = '';
         }
     });
-    if (response.ok) {
-        let json = await response.json();
-        let postElement = createPostElement(json.post_id, json.contents, json.date_created, true);
-        body.insertBefore(postElement, inputPost.nextSibling);
-        userInput.textContent = '';
-    }
-});
+}
