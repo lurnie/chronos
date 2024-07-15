@@ -37,7 +37,7 @@ function addHTMLBoilerplate(html, title, parameters) {
         <link rel='stylesheet' href='../styles/main.css'>
     </head>
     <body>
-        ${navbar}
+        ${parameters.userId ? navbarUser : navbarGuest}
         ${html}
     </body>
     </html>
@@ -59,12 +59,20 @@ async function returnPage(req, res, src, title=defaultTitle, parameters=new Obje
     })
 }
 
-let navbar;
-readFile(path + 'public/pages/navbar.html', 'utf-8', (err, content) => {
+let navbarUser;
+readFile(path + 'public/pages/navbarUser.html', 'utf-8', (err, content) => {
     if (err) {
-        navbar = '';
+        navbarUser = '';
     } else {
-        navbar = content;
+        navbarUser = content;
+    }
+});
+let navbarGuest;
+readFile(path + 'public/pages/navbarGuest.html', 'utf-8', (err, content) => {
+    if (err) {
+        navbarGuest = '';
+    } else {
+        navbarGuest = content;
     }
 });
 
