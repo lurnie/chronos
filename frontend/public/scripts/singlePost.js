@@ -131,7 +131,7 @@ function createReplyElement(id, contents, timestamp) {
 
         replyButton.addEventListener('click', () => {
             const replyBox = createReplyBox(id);
-            let nextSibling = box.nextSibling;
+            let nextSibling = box.nextSibling.children[0];;
             if (nextSibling && nextSibling.getAttribute('class') === 'reply input-box') {return;}
             outerWrapper.insertBefore(replyBox, box.nextSibling);
         });
