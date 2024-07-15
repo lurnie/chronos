@@ -46,6 +46,7 @@ h1 {
 }
 .post-date {
     display: block;
+    color: grey;
 }
 .post-link {
     color: inherit;
@@ -64,6 +65,12 @@ h1 {
 }
 .post-user-input:focus {
     outline: none;
+}
+.post-username {
+    margin-bottom: 15px;
+}
+.post-username::before {
+    content: '@'
 }
 
 .navbar {
@@ -95,6 +102,11 @@ h1 {
     }
 }
 
+.nav-username {
+    padding: 16px;
+    color: black;
+    user-select: none;
+}
 .nav-link {
     padding: 16px;
     text-decoration: none;

@@ -7,10 +7,6 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DB
 }).promise();
 
-async function getAllPosts() {
-    const [results] = await pool.query(`SELECT * FROM post ORDER BY date_created DESC`);
-    return results;
-}
 
 async function getCommentsFromPost(id) {
     //TODO: maybe remove the IS NULL requirement?
@@ -43,8 +39,12 @@ async function createComment(postId, content, userId, parentId=null) {
     }
 }
 
+async function getAllPosts() {
+    const [results] = await pool.query(`SELECT post_id, contents, post.date_created, post.user_id, user.username FROM post JOIN user ON post.user_id = user.user_id ORDER BY date_created DESC`);
+    return results;
+}
 async function getPost(id) {
-    const [results] = await pool.query(`SELECT * FROM post WHERE post_id = ?`, [id]);
+    const [results] = await pool.query(`SELECT post_id, contents, post.date_created, post.user_id, user.username FROM post JOIN user ON post.user_id = user.user_id WHERE post_id = ?`, [id]);
     return results[0];
 }
 async function createPost(content, userId) {

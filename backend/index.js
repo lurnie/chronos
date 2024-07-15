@@ -47,7 +47,9 @@ function addHTMLBoilerplate(html, title, parameters) {
 const defaultTitle = 'LurnSite';
 
 async function returnPage(req, res, src, title=defaultTitle, parameters=new Object(), status=200) {
-    parameters.userId = req.userId; // the current userId is always included in the parameters to send to the frontend
+    // the current userId and username is always included in the parameters to send to the frontend
+    parameters.userId = req.userId;
+    parameters.username = req.username;
     readFile(path + 'public/pages/' + src, 'utf-8', (err, content) => {
         if (err) {
             console.log(`500 Internal Server Error - failed to retrieve ${path+'public/pages/'+src}`);
@@ -79,10 +81,15 @@ readFile(path + 'public/pages/navbarGuest.html', 'utf-8', (err, content) => {
 app.use(express.urlencoded({extended: false}));
 
 async function getCurrentUser(req, res, next) {
+    req.username = undefined;
     if (req.cookies.session) {
         let session = await getSession(req.cookies.session);
         if (!session) {req.userId = undefined;}
-        else {req.userId = session.user_id;}
+        else {
+            req.userId = session.user_id;
+            const {username} = await getUserById(req.userId);
+            req.username = username;
+        }
     } else {
         req.userId = undefined;
     }
@@ -182,6 +189,32 @@ app.post('/api/posts/:id/comments', requireUserAuth, async (req, res) => {
     }
 });
 
+// gives back all the data except the password hash
+app.get('/api/users/username/:username', async (req, res) => {
+    const response = await getUserByUsername(req.params.username)
+    if (response === undefined) {res.send(undefined); return;}
+
+    const {user_id, username, admin_privileges, date_created} = response;
+    res.send({
+        user_id: user_id,
+        username: username,
+        admin_privileges: admin_privileges,
+        date_created: date_created
+    });
+});
+app.get('/api/users/id/:id', async (req, res) => {
+    const response = await getUserById(req.params.id);
+    if (response === undefined) {res.send(undefined); return;}
+    const {user_id, username, admin_privileges, date_created} = response;
+    res.send({
+        user_id: user_id,
+        username: username,
+        admin_privileges: admin_privileges,
+        date_created: date_created
+    });
+});
+
+// TODO: fix error pages not being styled
 app.get('*', (req, res) => {
     returnPage(req, res, '404.html', '404 Page Not Found', undefined, 404);
 })

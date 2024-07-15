@@ -11,4 +11,7 @@ logout.addEventListener('click', async () => {
     if (response.ok) {
         window.location.href = '/';
     }
-})
+});
+
+const usernameElement = document.querySelector('#username');
+usernameElement.textContent = params.username;

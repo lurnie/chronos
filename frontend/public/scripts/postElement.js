@@ -1,7 +1,12 @@
 // this function gets reused by multiple files
 
-function createPostElement(id, contents, userId, timestamp, link=false) {
+function createPostElement(id, contents, username, timestamp, link=false) {
     const div = document.createElement('div');
+
+    const usernameElement = document.createElement('div');
+
+    usernameElement.setAttribute('class', 'post-username');
+    usernameElement.textContent = username;
 
     const contentsElement = document.createElement('span');
     contentsElement.textContent = contents;
@@ -10,8 +15,7 @@ function createPostElement(id, contents, userId, timestamp, link=false) {
     timestampElement.textContent = timestamp.slice(0, 10);
     timestampElement.setAttribute('class', 'post-date')
 
-    div.appendChild(contentsElement);
-    div.appendChild(timestampElement);
+    div.append(usernameElement, contentsElement, timestampElement);
 
     if (link) {
         const linkElement = document.createElement('a');

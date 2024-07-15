@@ -129,14 +129,12 @@ function createReplyElement(id, contents, timestamp) {
         replyButton.textContent = 'Reply';
         replyButton.setAttribute('class', 'reply-button');
 
-
-
         replyButton.addEventListener('click', () => {
             const replyBox = createReplyBox(id);
             let nextSibling = box.nextSibling;
             if (nextSibling && nextSibling.getAttribute('class') === 'reply input-box') {return;}
             outerWrapper.insertBefore(replyBox, box.nextSibling);
-        })
+        });
         box.appendChild(replyButton);
     }
     return outerWrapper;
@@ -148,7 +146,7 @@ await getPost(params.id).then( (postData) => {
         body.innerHTML = 'Could not find post.'
         return;
     }
-    const post = createPostElement(postData.post_id, postData.contents, postData.user_id, postData.date_created);
+    const post = createPostElement(postData.post_id, postData.contents, postData.username, postData.date_created);
 
     body.appendChild(post);
 });
