@@ -10,15 +10,15 @@ const pool = mysql.createPool({
 
 async function getCommentsFromPost(id) {
     //TODO: maybe remove the IS NULL requirement?
-    const [results] = await pool.query(`SELECT * FROM comment WHERE post_id = ? ORDER BY date_created`, [id]);
+    const [results] = await pool.query(`SELECT comment_id, contents, post_id, parent_comment, comment.date_created, comment.user_id, user.username FROM comment JOIN user ON comment.user_id = user.user_id WHERE post_id = ? ORDER BY date_created`, [id]);
     return results;
 }
 async function getCommentsFromParentComment(id) {
-    const [results] = await pool.query(`SELECT * FROM comment WHERE parent_comment = ? ORDER BY date_created`, [id]);
+    const [results] = await pool.query(`SELECT comment_id, contents, post_id, parent_comment, comment.date_created, comment.user_id, user.username FROM comment JOIN user ON comment.user_id = user.user_id WHERE parent_comment = ? ORDER BY date_created`, [id]);
     return results[0];
 }
 async function getComment(id) {
-    const [results] = await pool.query(`SELECT * FROM comment WHERE comment_id = ?`, [id]);
+    const [results] = await pool.query(`SELECT comment_id, contents, post_id, parent_comment, comment.date_created, comment.user_id, user.username FROM comment JOIN user ON comment.user_id = user.user_id WHERE comment_id = ?`, [id]);
     return results[0];
 }
 

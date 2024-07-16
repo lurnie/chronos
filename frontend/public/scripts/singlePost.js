@@ -95,7 +95,7 @@ function createReplyBox(parent, canDelete=true) {
         if (response.ok) {
             input.textContent = '';
             let json = await response.json();
-            const newComment = createReplyElement(json.comment_id, json.contents, json.date_created);
+            const newComment = createReplyElement(json.comment_id, json.contents, json.username, json.date_created);
             if (json.parent_comment === null) {
                 body.insertBefore(newComment, upperReplyBox.nextSibling);
             } else {
@@ -109,7 +109,7 @@ function createReplyBox(parent, canDelete=true) {
     return outerWrapper;
 }
 
-function createReplyElement(id, contents, timestamp) {
+function createReplyElement(id, contents, userId, timestamp) {
     const box = document.createElement('div');
     box.setAttribute('class', 'reply');
     box.setAttribute('id', `comment-${id}`);
@@ -117,10 +117,14 @@ function createReplyElement(id, contents, timestamp) {
     const commentContent = document.createElement('span');
     commentContent.textContent = contents;
     const timestampElement = document.createElement('span');
-    timestampElement.textContent = timestamp.slice(0, 10)
-    timestampElement.setAttribute('class', 'post-date')
+    timestampElement.textContent = timestamp.slice(0, 10);
+    timestampElement.setAttribute('class', 'post-date');
 
-    box.append(commentContent, timestampElement);
+    const usernameElement = document.createElement('div');
+    usernameElement.setAttribute('class', 'post-username');
+    usernameElement.textContent = userId;
+
+    box.append(usernameElement, commentContent, timestampElement);
     const outerWrapper = document.createElement('ul');
     outerWrapper.appendChild(box);
 
@@ -138,7 +142,7 @@ function createReplyElement(id, contents, timestamp) {
         box.appendChild(replyButton);
     }
     return outerWrapper;
-}
+};
 
 await getPost(params.id).then( (postData) => {
     if (postData === undefined) {
@@ -162,7 +166,7 @@ body.appendChild(upperReplyBox);
 await getComments(params.id).then((comments) => {
     if (comments === undefined) {return;}
     for (let comment of comments) {
-        const reply = createReplyElement(comment.comment_id, comment.contents, comment.date_created);
+        const reply = createReplyElement(comment.comment_id, comment.contents, comment.username, comment.date_created);
 
         if (comment.parent_comment === null) {
             body.insertBefore(reply, upperReplyBox.nextSibling);

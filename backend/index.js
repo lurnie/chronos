@@ -214,7 +214,6 @@ app.get('/api/users/id/:id', async (req, res) => {
     });
 });
 
-// TODO: fix error pages not being styled
 app.get('*', (req, res) => {
     returnPage(req, res, '404.html', '404 Page Not Found', undefined, 404);
 })
