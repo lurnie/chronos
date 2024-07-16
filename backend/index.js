@@ -122,8 +122,8 @@ app.get('/join', redirectIfLoggedIn, async (req, res) => {
 app.post('/api/join', requireLoggedOut, async (req, res) => {
     try {
         const {username, password} = req.body;
-        if (!username || !password) {res.status(400).send('Missing password or username.');}
-        if (password.length > 20) {res.status(400).send('Password cannot be longer than 20 characters.')}
+        if (!username || !password) {res.status(400).send('Missing password or username.'); return;}
+        if (password.length > 40) {res.status(400).send('Password cannot be longer than 40 characters.'); return;}
         const hash = await bcrypt.hash(password, 13);
         const result = await createUser(username, hash);
         if (result === 400) {
@@ -149,7 +149,7 @@ app.post('/api/login', requireLoggedOut, async (req, res) => {
         if (user === undefined) {
             res.status(401).send('User not found.')
         } else {
-            const isMatch = bcrypt.compare(password, user.hash.toString('hex'))
+            const isMatch = await bcrypt.compare(password, user.hash.toString());
             if (isMatch) {
                 let sessionId = crypto.randomBytes(16).toString('hex');
 

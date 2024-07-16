@@ -1,3 +1,15 @@
+CREATE TABLE user (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(20) UNIQUE NOT NULL,
+    hash BINARY(60),
+    admin_privileges tinyint(1) DEFAULT(0),
+    date_created DATETIME DEFAULT NOW()
+);
+CREATE TABLE session (
+    user_id INT PRIMARY KEY,
+    session_id CHAR(32) UNIQUE,
+    FOREIGN KEY session(user_id) REFERENCES user(user_id) ON DELETE CASCADE
+);
 CREATE TABLE post (
     post_id INT PRIMARY KEY AUTO_INCREMENT,
     contents VARCHAR(280) NOT NULL,
@@ -15,19 +27,5 @@ CREATE TABLE comment (
     date_created DATETIME DEFAULT NOW(),
     FOREIGN KEY comment(post_id) REFERENCES post(post_id) ON DELETE CASCADE,
     FOREIGN KEY (parent_comment) REFERENCES comment(comment_id) ON DELETE CASCADE,
-    FOREIGN KEY comment(user_id) REFERENCES user(user_id) ON DELETE CASCADE
-);
-
-CREATE TABLE user (
-    user_id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(20) UNIQUE NOT NULL,
-    hash BINARY(60),
-    admin_privileges tinyint(1) DEFAULT(0),
-    date_created DATETIME DEFAULT NOW()
-);
-
-CREATE TABLE session (
-    user_id INT PRIMARY KEY,
-    session_id CHAR(32) UNIQUE,
-    FOREIGN KEY session(user_id) REFERENCES user(user_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );

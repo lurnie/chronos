@@ -13,7 +13,6 @@ form.addEventListener('submit', async (event) => {
             'Content-type': 'application/json; charset=UTF-8'
         }
     });
-    console.log('hi')
     if (response.ok) {
         // login with that account
         const response = await fetch('/api/login', {
