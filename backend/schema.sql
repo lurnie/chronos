@@ -21,7 +21,7 @@ CREATE TABLE comment (
 CREATE TABLE user (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(20) UNIQUE NOT NULL,
-    hash VARCHAR(20),
+    hash BINARY(60),
     admin_privileges tinyint(1) DEFAULT(0),
     date_created DATETIME DEFAULT NOW()
 );

@@ -35,14 +35,14 @@ h1 {
         display: block;
     }
 }
-#signin {
+.user-button {
     font-size: 1rem;
     padding: 5px;
     border: solid black 2px;
     border-radius: 2px;
     background-color: rgb(227, 198, 254);
 }
-#signin:active {
+.user-button:active {
     background-color: rgb(203, 155, 248);
 }
 

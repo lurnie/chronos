@@ -115,6 +115,29 @@ app.get('/', async (req, res) => {
     res.redirect('/posts');
 })
 
+
+app.get('/join', redirectIfLoggedIn, async (req, res) => {
+    returnPage(req, res, 'join.html', 'Join');
+});
+app.post('/api/join', requireLoggedOut, async (req, res) => {
+    try {
+        const {username, password} = req.body;
+        if (!username || !password) {res.status(400).send('Missing password or username.');}
+        if (password.length > 20) {res.status(400).send('Password cannot be longer than 20 characters.')}
+        const hash = await bcrypt.hash(password, 13);
+        const result = await createUser(username, hash);
+        if (result === 400) {
+            res.status(400).send('Unable to create account. Try reloading or using a different username/password.');
+        } else {
+            res.send('Account created.');
+        }
+
+    } catch (err) {
+        console.log(err);
+        res.status(400).send('Unable to create account.');
+    }
+})
+
 app.get('/login', redirectIfLoggedIn, async (req, res) => {
     returnPage(req, res, 'login.html', 'Login');
 });
@@ -125,21 +148,24 @@ app.post('/api/login', requireLoggedOut, async (req, res) => {
         let user = await getUserByUsername(username);
         if (user === undefined) {
             res.status(401).send('User not found.')
-        } else if (password === user.hash) {
-            let sessionId = crypto.randomBytes(16).toString('hex');
-
-            res.cookie('session', sessionId, {
-                httpOnly: true,
-                sameSite: 'strict'
-            });
-            let sessionResult = await setSession(user.user_id, sessionId);
-            if (sessionResult === 400) {
-                res.status(400).send('Error logging in.');
-            } else {
-                res.send('Logged in.');
-            }
         } else {
-            res.status(401).send('Incorrect password.')
+            const isMatch = bcrypt.compare(password, user.hash.toString('hex'))
+            if (isMatch) {
+                let sessionId = crypto.randomBytes(16).toString('hex');
+
+                res.cookie('session', sessionId, {
+                    httpOnly: true,
+                    sameSite: 'strict'
+                });
+                let sessionResult = await setSession(user.user_id, sessionId);
+                if (sessionResult === 400) {
+                    res.status(400).send('Error logging in.');
+                } else {
+                    res.send('Logged in.');
+                }
+            } else {
+                res.status(401).send('Incorrect password.')
+            }
         }
     } catch (err) {
         console.log(err);
