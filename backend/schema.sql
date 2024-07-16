@@ -1,6 +1,6 @@
 CREATE TABLE post (
     post_id INT PRIMARY KEY AUTO_INCREMENT,
-    contents VARCHAR(140) NOT NULL,
+    contents VARCHAR(280) NOT NULL,
     user_id INT NOT NULL,
     date_created DATETIME DEFAULT NOW(),
     FOREIGN KEY post(user_id) REFERENCES user(user_id) ON DELETE CASCADE
@@ -8,7 +8,7 @@ CREATE TABLE post (
 
 CREATE TABLE comment (
     comment_id INT PRIMARY KEY AUTO_INCREMENT,
-    contents VARCHAR(140) NOT NULL,
+    contents VARCHAR(280) NOT NULL,
     post_id INT,
     user_id INT NOT NULL,
     parent_comment INT DEFAULT NULL,
