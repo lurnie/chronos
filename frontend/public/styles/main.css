@@ -1,6 +1,8 @@
 body {
     margin: 0;
     word-wrap: break-word;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 95%;
 }
 
 h1 {
@@ -88,6 +90,7 @@ h1 {
     margin-top: 10px;
     display: block;
     color: grey;
+    font-style: italic;
 }
 .post-link {
     color: inherit;
