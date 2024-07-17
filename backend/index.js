@@ -14,7 +14,7 @@ const port = 3000;
 const path = '../frontend/';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
-    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession
+    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost
  } from './database.js';
 
 
@@ -202,6 +202,16 @@ app.get('/api/posts', async (req, res) => {
 app.get('/api/posts/:id', async (req, res) => {
     res.send(await getPost(req.params.id));
 });
+app.delete('/api/posts/:id', async (req, res) => {
+    let post = await getPost(req.params.id);
+    if (req.userId !== post.user_id) {res.status(401).send('You can only delete posts that you made.'); return;}
+    let result = await deletePost(req.params.id);
+    if (result === 400) {
+        res.status(400).send('Unable to delete post.')
+    } else {
+        res.send('Post deleted.')
+    }
+})
 app.get('/api/posts/:id/comments', async (req, res) => {
     res.send(await getCommentsFromPost(req.params.id));
 });
@@ -216,7 +226,7 @@ app.post('/api/posts/:id/comments', requireUserAuth, async (req, res) => {
 });
 
 // gives back all the data except the password hash
-app.get('/api/users/username/:username', async (req, res) => {
+app.get('/api/users/:username', async (req, res) => {
     const response = await getUserByUsername(req.params.username)
     if (response === undefined) {res.send(undefined); return;}
 

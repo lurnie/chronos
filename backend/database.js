@@ -65,6 +65,16 @@ async function createPost(content, userId) {
         return 400;
     }
 }
+async function deletePost(postId) {
+    if (postId === undefined) {return 400;}
+    try {
+        await pool.query('DELETE FROM post WHERE post_id = ?', [postId]);
+        return 200;
+    } catch (err) {
+        console.log(err);
+        return 400;
+    }
+}
 
 async function createUser(username, hashedPassword) {
     if (username === undefined || hashedPassword === undefined) {return 400;}
@@ -139,5 +149,5 @@ async function deleteSession(userId) {
 }
 
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
-    getUserById, getUserByUsername, getSession, setSession, deleteSession
+    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost
 };

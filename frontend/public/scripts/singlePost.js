@@ -5,7 +5,6 @@ const body = document.querySelector('body');
 async function getPost(id) {
     try {
         const response = await fetch(`/api/posts/${id}`);
-
         if (!response.ok) {
             throw new Error(response.status);
         }
@@ -135,8 +134,7 @@ function createReplyElement(id, contents, userId, timestamp) {
 
         replyButton.addEventListener('click', () => {
             const replyBox = createReplyBox(id);
-            let nextSibling = box.nextSibling.children[0];;
-            if (nextSibling && nextSibling.getAttribute('class') === 'reply input-box') {return;}
+            if (box.nextSibling && box.nextSibling.children[0].getAttribute('class') === 'reply input-box') {return;}
             outerWrapper.insertBefore(replyBox, box.nextSibling);
         });
         box.appendChild(replyButton);
@@ -144,10 +142,15 @@ function createReplyElement(id, contents, userId, timestamp) {
     return outerWrapper;
 };
 
+let postExists = true;
+
 await getPost(params.id).then( (postData) => {
     if (postData === undefined) {
         //TODO: make a better error message
-        body.innerHTML = 'Could not find post.'
+        const error = document.createElement('div');
+        error.textContent = 'Could not find post.';
+        body.appendChild(error);
+        postExists = false;
         return;
     }
     const post = createPostElement(postData.post_id, postData.contents, postData.username, postData.date_created);
@@ -156,12 +159,14 @@ await getPost(params.id).then( (postData) => {
 });
 
 let upperReplyBox ;
-if (params.userId) {
-    upperReplyBox = createReplyBox(null, false);
-} else {
-    upperReplyBox = document.createElement('div');
+if (postExists) {
+    if (params.userId) {
+        upperReplyBox = createReplyBox(null, false);
+    } else {
+        upperReplyBox = document.createElement('div');
+    }
+    body.appendChild(upperReplyBox);
 }
-body.appendChild(upperReplyBox);
 
 await getComments(params.id).then((comments) => {
     if (comments === undefined) {return;}

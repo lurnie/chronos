@@ -48,7 +48,9 @@ h1 {
 
 .reply-button {
     color: blue;
-    margin-top: 40px;
+    display: block;
+    margin-top: 10px;
+    user-select: none;
 }
 .reply-button:hover {
     text-decoration: underline;
@@ -81,9 +83,9 @@ h1 {
 }
 .post-content {
     display: block;
-    margin-bottom: 20px;
 }
 .post-date {
+    margin-top: 10px;
     display: block;
     color: grey;
 }
@@ -107,6 +109,8 @@ h1 {
 }
 .post-username {
     margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: solid rgb(175, 174, 174) 2px;
 }
 .post-username::before {
     content: '@'
