@@ -1,6 +1,12 @@
 const form = document.querySelector('form');
 
+const usernameError = document.querySelector('#username-error');
+const passwordError = document.querySelector('#password-error');
+
 form.addEventListener('submit', async (event) => {
+    usernameError.textContent = '';
+    passwordError.textContent = '';
+
     event.preventDefault();
     let formData = new FormData(form);
     let values = Object.fromEntries(formData);
@@ -27,5 +33,14 @@ form.addEventListener('submit', async (event) => {
         } else {
             window.location.href = '/login';
         }
+    } else {
+        let errorText = await response.text();
+        if (errorText === 'Username cannot be longer than 20 characters.') {usernameError.textContent = errorText;}
+        if (errorText === 'Password cannot be longer than 40 characters.') {passwordError.textContent = errorText;}
+        if (errorText === 'ER_DUP_ENTRY') {usernameError.textContent = 'Username is already taken.';}
+        if (errorText === 'Missing username') {usernameError.textContent = 'Missing username.';}
+        if (errorText === 'Missing password') {passwordError.textContent = 'Missing password.';}
+        if (errorText === 'Password must be at least 3 chars') {passwordError.textContent = 'Password must be at least 3 characters.';}
+        if (passwordError.textContent === '' && usernameError.textContent === '') {usernameError.textContent = 'Unknown error. Reload page or try again.';}
     }
 });

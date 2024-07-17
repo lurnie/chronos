@@ -39,6 +39,15 @@ h1 {
     background-color: rgb(227, 227, 227);
 }
 
+.error {
+    display: block;
+    color: red;
+    text-align: left;
+    width: 80%;
+    margin-inline: auto;
+    font-size: 80%;
+}
+
 .login-container {
     width: 40%;
     margin-inline: auto;

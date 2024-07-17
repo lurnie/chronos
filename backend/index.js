@@ -122,12 +122,16 @@ app.get('/join', redirectIfLoggedIn, async (req, res) => {
 app.post('/api/join', requireLoggedOut, async (req, res) => {
     try {
         const {username, password} = req.body;
-        if (!username || !password) {res.status(400).send('Missing password or username.'); return;}
+        if (!username) {res.status(400).send('Missing username'); return;}
+        if (!password) {res.status(400).send('Missing password'); return;}
+        if (username.length > 20) {res.status(400).send('Username cannot be longer than 20 characters.'); return;}
         if (password.length > 40) {res.status(400).send('Password cannot be longer than 40 characters.'); return;}
+        if (password.length < 3) {res.status(400).send('Password must be at least 3 chars'); return;}
         const hash = await bcrypt.hash(password, 13);
         const result = await createUser(username, hash);
-        if (result === 400) {
-            res.status(400).send('Unable to create account. Try reloading or using a different username/password.');
+        if (typeof(result) === 'object') {
+            // there was an error
+            res.status(400).send(result.code);
         } else {
             res.send('Account created.');
         }
@@ -144,10 +148,12 @@ app.get('/login', redirectIfLoggedIn, async (req, res) => {
 app.post('/api/login', requireLoggedOut, async (req, res) => {
     try {
         const {username, password} = req.body;
-        if (!username || !password) {res.status(400).send('Missing password or username.'); return;}
+        if (!username) {res.status(400).send('Missing username'); return;}
+        if (!password) {res.status(400).send('Missing password'); return;}
+
         let user = await getUserByUsername(username);
         if (user === undefined) {
-            res.status(401).send('User not found.')
+            res.status(401).send('User not found');
         } else {
             const isMatch = await bcrypt.compare(password, user.hash.toString());
             if (isMatch) {
@@ -159,12 +165,12 @@ app.post('/api/login', requireLoggedOut, async (req, res) => {
                 });
                 let sessionResult = await setSession(user.user_id, sessionId);
                 if (sessionResult === 400) {
-                    res.status(400).send('Error logging in.');
+                    res.status(400).send('Error logging in');
                 } else {
-                    res.send('Logged in.');
+                    res.send('Logged in');
                 }
             } else {
-                res.status(401).send('Incorrect password.')
+                res.status(401).send('Incorrect password')
             }
         }
     } catch (err) {

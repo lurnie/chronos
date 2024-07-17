@@ -84,7 +84,7 @@ async function createUser(username, hashedPassword) {
         return userId;
     } catch (err) {
         console.log(err);
-        return 400;
+        return err;
     }
 }
 async function getUserById(userId) {

@@ -2,9 +2,11 @@
     <h1>Join</h1>
     <form action="/api/join" method="post">
         <label for="username">Username:</label>
+        <span class="error" id="username-error"></span>
         <input type="text" id="username" name="username">
         <br>
         <label for="password">Password (Do NOT reuse from another site):</label>
+        <span class="error" id="password-error"></span>
         <input type="password" id="password" name="password">
         <br>
         <button type="submit" class="user-button">Join</button>
