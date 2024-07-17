@@ -108,7 +108,7 @@ function createReplyBox(parent, canDelete=true) {
     return outerWrapper;
 }
 
-function createReplyElement(id, contents, userId, timestamp) {
+function createReplyElement(id, contents, username, timestamp) {
     // TODO: put this in a separate file or combine it with the post creation code?
     const box = document.createElement('div');
     box.setAttribute('class', 'reply');
@@ -129,7 +129,7 @@ function createReplyElement(id, contents, userId, timestamp) {
 
     const usernameElement = document.createElement('div');
     usernameElement.setAttribute('class', 'post-username');
-    usernameElement.textContent = userId;
+    usernameElement.textContent = username;
 
 
     const dropdown = document.createElement('div');
@@ -168,6 +168,9 @@ function createReplyElement(id, contents, userId, timestamp) {
     outerWrapper.appendChild(box);
 
     deleteButton.addEventListener('click', async () => {
+        if (username !== params.username) {return;}
+        let confirmDelete = confirm('Are you sure you want to delete this post?');
+        if (!confirmDelete) {return;}
         const response = await fetch(`/api/comments/${id}`, {
             method: 'DELETE',
         });
@@ -202,7 +205,7 @@ await getPost(params.id).then( (postData) => {
         postExists = false;
         return;
     }
-    const post = createPostElement(postData.post_id, postData.contents, postData.username, postData.date_created);
+    const post = createPostElement(postData.post_id, postData.contents, postData.username, postData.date_created, params.username);
 
     body.appendChild(post);
 });

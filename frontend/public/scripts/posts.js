@@ -15,7 +15,7 @@ async function getPosts() {
 
 getPosts().then((posts) => {
     for (let post of posts) {
-        let postElement = createPostElement(post.post_id, post.contents, post.username, post.date_created, true);
+        let postElement = createPostElement(post.post_id, post.contents, post.username, post.date_created, params.username, true);
         body.appendChild(postElement);
     }
 });
@@ -61,7 +61,7 @@ if (params.userId) {
         });
         if (response.ok) {
             let json = await response.json();
-            let postElement = createPostElement(json.post_id, json.contents, json.username, json.date_created, true);
+            let postElement = createPostElement(json.post_id, json.contents, json.username, json.date_created, params.username, true);
             body.insertBefore(postElement, inputPost.nextSibling);
             userInput.textContent = '';
         }
