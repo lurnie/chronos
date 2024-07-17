@@ -23,6 +23,16 @@ async function getComment(id) {
     const [results] = await pool.query(`SELECT comment_id, contents, post_id, parent_comment, comment.date_created, comment.user_id, user.username FROM comment JOIN user ON comment.user_id = user.user_id WHERE comment_id = ?`, [id]);
     return results[0];
 }
+async function deleteComment(id) {
+    if (id === undefined) {return 400;}
+    try {
+        await pool.query('DELETE FROM comment WHERE comment_id = ?', [id]);
+        return 200;
+    } catch (err) {
+        console.log(err);
+        return 400;
+    }
+}
 
 async function createComment(postId, content, userId, parentId=null) {
     if (content === undefined || userId === undefined) {
@@ -149,5 +159,5 @@ async function deleteSession(userId) {
 }
 
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
-    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost
+    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment
 };

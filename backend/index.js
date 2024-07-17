@@ -14,7 +14,7 @@ const port = 3000;
 const path = '../frontend/';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
-    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost
+    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment
  } from './database.js';
 
 
@@ -211,15 +211,15 @@ app.get('/api/posts/:id', async (req, res) => {
 app.delete('/api/posts/:id', requireUserAuth, async (req, res) => {
     let post = await getPost(req.params.id);
     if (post === 400 || !post) {
-        res.status(400).send('Error getting post.');
+        res.status(400).send('Error getting post');
         return;
     }
-    if (req.userId !== post.user_id) {res.status(401).send('You can only delete posts that you made.'); return;}
+    if (req.userId !== post.user_id) {res.status(401).send('You can only delete posts that you made'); return;}
     let result = await deletePost(req.params.id);
     if (result === 400) {
-        res.status(400).send('Unable to delete post.')
+        res.status(400).send('Unable to delete post')
     } else {
-        res.send('Post deleted.')
+        res.send('Post deleted')
     }
 })
 app.get('/api/posts/:id/comments', async (req, res) => {
@@ -234,6 +234,22 @@ app.post('/api/posts/:id/comments', requireUserAuth, async (req, res) => {
         res.send(result);
     }
 });
+
+app.get('/api/comments/:id', async (req, res) => {
+    res.send(await getComment(req.params.id));
+});
+app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
+    const comment = await getComment(req.params.id);
+    if (comment === 400 || !comment) {res.status(400).send('Error getting comment'); return;}
+    if (req.userId !== comment.user_id) {res.status(401).send('You can only delete comments that you made'); return;}
+    const result = await deleteComment(req.params.id);
+    if (result === 400) {
+        res.status(400).send('Unable to delete comment');
+    } else {
+        res.status(200).send('Comment deleted');
+    }
+});
+
 
 // gives back all the data except the password hash
 app.get('/api/users/:username', async (req, res) => {

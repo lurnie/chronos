@@ -44,7 +44,7 @@ function createPostElement(id, contents, username, timestamp, link=false) {
         if (clickedElement !== dropdownButton && clickedElement !== deleteButton) {
             dropdown.setAttribute('class', 'dropdown');
         }
-    })
+    });
 
     dropdownContent.append(deleteButton);
     dropdown.append(dropdownButton, dropdownContent)
@@ -61,7 +61,7 @@ function createPostElement(id, contents, username, timestamp, link=false) {
             if (!link) {div.remove();}
             else {secondDiv.remove()}
         }
-    })
+    });
 
     if (link) {
         const linkElement = document.createElement('a');

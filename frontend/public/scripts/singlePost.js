@@ -128,9 +128,50 @@ function createReplyElement(id, contents, userId, timestamp) {
     usernameElement.setAttribute('class', 'post-username');
     usernameElement.textContent = userId;
 
-    box.append(usernameElement, commentContent, timestampElement);
+
+    const dropdown = document.createElement('div');
+    dropdown.setAttribute('class', 'dropdown');
+    const dropdownButton = document.createElement('button');
+    dropdownButton.textContent = '...';
+    dropdownButton.setAttribute('class', 'dropdown-button')
+    const dropdownContent = document.createElement('div');
+    dropdownContent.setAttribute('class', 'content');
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.setAttribute('class', 'dropdown-element delete-post');
+
+    const body = document.body;
+
+    dropdown.addEventListener('click', () => {
+        if (dropdown.getAttribute('class') === 'dropdown open') {
+            dropdown.setAttribute('class', 'dropdown');
+        } else {
+            dropdown.setAttribute('class', 'dropdown open');
+        }
+    });
+    body.addEventListener('click', (event) => {
+        const clickedElement = document.elementFromPoint(event.clientX, event.clientY);
+        if (clickedElement !== dropdownButton && clickedElement !== deleteButton) {
+            dropdown.setAttribute('class', 'dropdown');
+        }
+    });
+
+
+    dropdownContent.append(deleteButton);
+    dropdown.append(dropdownButton, dropdownContent)
+
+    box.append(usernameElement, commentContent, timestampElement, dropdown);
     const outerWrapper = document.createElement('ul');
     outerWrapper.appendChild(box);
+
+    deleteButton.addEventListener('click', async () => {
+        const response = await fetch(`/api/comments/${id}`, {
+            method: 'DELETE',
+        });
+        if (response.ok) {
+            outerWrapper.remove();
+        }
+    });
 
     if (params.userId) {
         const replyButton = document.createElement('span');
