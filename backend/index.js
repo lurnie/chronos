@@ -97,17 +97,17 @@ async function getCurrentUser(req, res, next) {
 }
 app.use(getCurrentUser);
 
-async function requireUserAuth(req, res, next) {
+function requireUserAuth(req, res, next) {
     if (req.userId) {
         next();
     } else {
         res.status(401).send('Must be logged in.');
     }
 }
-async function requireLoggedOut(req, res, next) {
+function requireLoggedOut(req, res, next) {
     if (!req.userId) {next();} else {res.status(401).send('Must be logged out.')}
 }
-async function redirectIfLoggedIn(req, res, next) {
+function redirectIfLoggedIn(req, res, next) {
     if (!req.userId) {next();} else {res.redirect('/');}
 }
 
