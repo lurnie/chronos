@@ -117,6 +117,26 @@ async function getUserByUsername(username) {
         return 400;
     }
 }
+async function safeGetUserById(userId) {
+    if (userId === undefined) {return 400;}
+    try {
+        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created FROM user WHERE user_id = ?', [userId]);
+        return result[0];
+    } catch (err) {
+        console.log(err);
+        return 400;
+    }
+}
+async function safeGetUserByUsername(username) {
+    if (username === undefined) {return 400;}
+    try {
+        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created FROM user WHERE username = ?', [username]);
+        return result[0];
+    } catch (err) {
+        console.log(err);
+        return 400;
+    }
+}
 
 async function getSession(sessionId) {
     if (sessionId === undefined) {return 400;}
@@ -159,5 +179,5 @@ async function deleteSession(userId) {
 }
 
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
-    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment
+    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername
 };

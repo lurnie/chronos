@@ -14,7 +14,7 @@ const port = 3000;
 const path = '../frontend/';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
-    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment
+    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername
  } from './database.js';
 
 
@@ -253,27 +253,14 @@ app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
 
 // gives back all the data except the password hash
 app.get('/api/users/:username', async (req, res) => {
-    const response = await getUserByUsername(req.params.username)
-    if (response === undefined) {res.send(undefined); return;}
-
-    const {user_id, username, admin_privileges, date_created} = response;
-    res.send({
-        user_id: user_id,
-        username: username,
-        admin_privileges: admin_privileges,
-        date_created: date_created
-    });
+    const response = await safeGetUserByUsername(req.params.username)
+    if (response === 400) {res.status(400).send('Error getting user')}
+    res.send(response);
 });
 app.get('/api/users/id/:id', async (req, res) => {
-    const response = await getUserById(req.params.id);
-    if (response === undefined) {res.send(undefined); return;}
-    const {user_id, username, admin_privileges, date_created} = response;
-    res.send({
-        user_id: user_id,
-        username: username,
-        admin_privileges: admin_privileges,
-        date_created: date_created
-    });
+    const response = await safeGetUserById(req.params.id)
+    if (response === 400) {res.status(400).send('Error getting user')}
+    res.send(response);
 });
 
 app.get('*', (req, res) => {
