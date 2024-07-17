@@ -116,7 +116,12 @@ function createReplyElement(id, contents, userId, timestamp) {
     const commentContent = document.createElement('span');
     commentContent.textContent = contents;
     const timestampElement = document.createElement('span');
-    timestampElement.textContent = timestamp.slice(0, 10);
+
+    let date = new Date(timestamp);
+    let month = date.toLocaleString('en-us', {month: 'short'});
+    let dateString = `${month} ${date.getDate()} ${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`
+
+    timestampElement.textContent = dateString;
     timestampElement.setAttribute('class', 'post-date');
 
     const usernameElement = document.createElement('div');

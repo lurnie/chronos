@@ -12,7 +12,10 @@ function createPostElement(id, contents, username, timestamp, link=false) {
     contentsElement.textContent = contents;
     contentsElement.setAttribute('class', 'post-content')
     const timestampElement = document.createElement('span');
-    timestampElement.textContent = timestamp.slice(0, 10);
+    let date = new Date(timestamp);
+    let month = date.toLocaleString('en-us', {month: 'short'});
+    let dateString = `${month} ${date.getDate()} ${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`
+    timestampElement.textContent = dateString;
     timestampElement.setAttribute('class', 'post-date')
 
     div.append(usernameElement, contentsElement, timestampElement);
