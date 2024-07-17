@@ -202,8 +202,12 @@ app.get('/api/posts', async (req, res) => {
 app.get('/api/posts/:id', async (req, res) => {
     res.send(await getPost(req.params.id));
 });
-app.delete('/api/posts/:id', async (req, res) => {
+app.delete('/api/posts/:id', requireUserAuth, async (req, res) => {
     let post = await getPost(req.params.id);
+    if (post === 400 || !post) {
+        res.status(400).send('Error getting post.');
+        return;
+    }
     if (req.userId !== post.user_id) {res.status(401).send('You can only delete posts that you made.'); return;}
     let result = await deletePost(req.params.id);
     if (result === 400) {
