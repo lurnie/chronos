@@ -65,8 +65,17 @@ function createPostElement(id, contents, username, timestamp, viewerUsername, ad
             method: 'DELETE',
         });
         if (response.ok) {
-            if (!link) {div.remove();}
-            else {secondDiv.remove()}
+            dropdown.remove()
+            if (!link) {
+                div.setAttribute('class', 'post deleted');
+                div.nextSibling.style['margin-top'] = 0;
+                setTimeout(() => {div.remove()}, 2000)
+            }
+            else {
+                secondDiv.setAttribute('class', 'post deleted');
+                secondDiv.nextSibling.style['margin-top'] = 0;
+                setTimeout(() => {secondDiv.remove()}, 2000)
+            }
         }
     });
 

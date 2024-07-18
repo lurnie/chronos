@@ -165,6 +165,8 @@ function createReplyElement(id, contents, username, timestamp) {
     const outerWrapper = document.createElement('ul');
     outerWrapper.appendChild(box);
 
+    const replyButton = document.createElement('span');
+
     deleteButton.addEventListener('click', async () => {
         if (username !== params.username && !params.admin) {return;}
         let confirmDelete = confirm('Are you sure you want to delete this post?');
@@ -173,12 +175,16 @@ function createReplyElement(id, contents, username, timestamp) {
             method: 'DELETE',
         });
         if (response.ok) {
-            outerWrapper.remove();
+            dropdown.remove();
+            replyButton.remove();
+            box.setAttribute('class', 'reply deleted');
+            outerWrapper.style['margin'] = 0;
+            outerWrapper.nextSibling.style['margin-top'] = 0;
+            setTimeout(() => {outerWrapper.remove()}, 2000)
         }
     });
 
     if (params.userId) {
-        const replyButton = document.createElement('span');
         replyButton.textContent = 'Reply';
         replyButton.setAttribute('class', 'reply-button');
 
