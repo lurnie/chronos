@@ -117,6 +117,8 @@ async function getUserByUsername(username) {
         return 400;
     }
 }
+
+// gives back all the data except private information, like the password hash
 async function safeGetUserById(userId) {
     if (userId === undefined) {return 400;}
     try {
