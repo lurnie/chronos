@@ -1,4 +1,5 @@
-// this function gets reused by multiple files
+import { getDateString } from "./getDateString.js";
+
 
 function createPostElement(id, contents, username, timestamp, viewerUsername, admin, link=false) {
     const div = document.createElement('div');
@@ -8,16 +9,17 @@ function createPostElement(id, contents, username, timestamp, viewerUsername, ad
     usernameElement.setAttribute('class', 'post-username');
     usernameElement.textContent = username;
 
+    const usernameLink = document.createElement('a');
+    usernameLink.setAttribute('href', `/users/${username}`);
+    usernameLink.setAttribute('class', 'username-link');
+    usernameLink.append(usernameElement);
+
     const contentsElement = document.createElement('span');
     contentsElement.textContent = contents;
     contentsElement.setAttribute('class', 'post-content')
     const timestampElement = document.createElement('span');
-    let date = new Date(timestamp);
-    let month = date.toLocaleString('en-us', {month: 'short'});
-    let minutes = date.getMinutes();
-    if (minutes < 10) {minutes = `0${minutes}`;} // prevents something like 8:02 from displaying as 8:2
-    let dateString = `${month} ${date.getDate()} ${date.getFullYear()}, ${date.getHours()}:${minutes}`
-    timestampElement.textContent = dateString;
+
+    timestampElement.textContent = getDateString(timestamp);
     timestampElement.setAttribute('class', 'post-date');
 
     const dropdown = document.createElement('div');
@@ -51,11 +53,10 @@ function createPostElement(id, contents, username, timestamp, viewerUsername, ad
     dropdownContent.append(deleteButton);
     dropdown.append(dropdownButton, dropdownContent)
 
-    div.append(usernameElement, contentsElement, timestampElement);
+    div.append(contentsElement, timestampElement);
 
     const secondDiv = document.createElement('div');
 
-    console.log(admin)
     deleteButton.addEventListener('click', async () => {
         if (username !== viewerUsername && !admin) {return;}
         let confirmDelete = confirm('Are you sure you want to delete this post?');
@@ -69,6 +70,7 @@ function createPostElement(id, contents, username, timestamp, viewerUsername, ad
         }
     });
 
+    div.insertBefore(usernameLink, contentsElement)
     if (link) {
         const linkElement = document.createElement('a');
         linkElement.setAttribute('href', `/posts/${id}`);

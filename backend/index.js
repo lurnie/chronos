@@ -254,7 +254,11 @@ app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
 });
 
 
-// gives back all the data except the password hash
+app.get('/users/:username', async (req, res, next) => {
+    const response = await safeGetUserByUsername(req.params.username)
+    if (response === 400 || !response) {next(); return;}
+    returnPage(req, res, 'user.html', req.params.username, {user: response});
+});
 app.get('/api/users/:username', async (req, res) => {
     const response = await safeGetUserByUsername(req.params.username)
     if (response === 400) {res.status(400).send('Error getting user')}

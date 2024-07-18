@@ -1,4 +1,5 @@
 import { createPostElement } from "./postElement.js";
+import { getDateString } from "./getDateString.js";
 
 const body = document.querySelector('body');
 
@@ -118,19 +119,16 @@ function createReplyElement(id, contents, username, timestamp) {
     commentContent.textContent = contents;
     const timestampElement = document.createElement('span');
 
-    let date = new Date(timestamp);
-    let month = date.toLocaleString('en-us', {month: 'short'});
-    let minutes = date.getMinutes();
-    if (minutes < 10) {minutes = `0${minutes}`;} // prevents something like 8:02 from displaying as 8:2
-    let dateString = `${month} ${date.getDate()} ${date.getFullYear()}, ${date.getHours()}:${minutes}`
-
-    timestampElement.textContent = dateString;
+    timestampElement.textContent = getDateString(timestamp);
     timestampElement.setAttribute('class', 'post-date');
 
     const usernameElement = document.createElement('div');
     usernameElement.setAttribute('class', 'post-username');
     usernameElement.textContent = username;
-
+    const usernameLink = document.createElement('a');
+    usernameLink.setAttribute('href', `/users/${username}`);
+    usernameLink.setAttribute('class', 'username-link');
+    usernameLink.append(usernameElement);
 
     const dropdown = document.createElement('div');
     dropdown.setAttribute('class', 'dropdown');
@@ -163,7 +161,7 @@ function createReplyElement(id, contents, username, timestamp) {
     dropdownContent.append(deleteButton);
     dropdown.append(dropdownButton, dropdownContent)
 
-    box.append(usernameElement, commentContent, timestampElement, dropdown);
+    box.append(usernameLink, commentContent, timestampElement, dropdown);
     const outerWrapper = document.createElement('ul');
     outerWrapper.appendChild(box);
 
