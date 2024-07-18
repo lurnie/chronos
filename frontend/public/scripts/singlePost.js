@@ -168,7 +168,7 @@ function createReplyElement(id, contents, username, timestamp) {
     outerWrapper.appendChild(box);
 
     deleteButton.addEventListener('click', async () => {
-        if (username !== params.username) {return;}
+        if (username !== params.username && !params.admin) {return;}
         let confirmDelete = confirm('Are you sure you want to delete this post?');
         if (!confirmDelete) {return;}
         const response = await fetch(`/api/comments/${id}`, {
@@ -205,7 +205,7 @@ await getPost(params.id).then( (postData) => {
         postExists = false;
         return;
     }
-    const post = createPostElement(postData.post_id, postData.contents, postData.username, postData.date_created, params.username);
+    const post = createPostElement(postData.post_id, postData.contents, postData.username, postData.date_created, params.username, params.admin);
 
     body.appendChild(post);
 });

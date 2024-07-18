@@ -1,6 +1,6 @@
 // this function gets reused by multiple files
 
-function createPostElement(id, contents, username, timestamp, viewerUsername, link=false) {
+function createPostElement(id, contents, username, timestamp, viewerUsername, admin, link=false) {
     const div = document.createElement('div');
 
     const usernameElement = document.createElement('div');
@@ -55,8 +55,9 @@ function createPostElement(id, contents, username, timestamp, viewerUsername, li
 
     const secondDiv = document.createElement('div');
 
+    console.log(admin)
     deleteButton.addEventListener('click', async () => {
-        if (username !== viewerUsername) {return;}
+        if (username !== viewerUsername && !admin) {return;}
         let confirmDelete = confirm('Are you sure you want to delete this post?');
         if (!confirmDelete) {return;}
         const response = await fetch(`/api/posts/${id}`, {

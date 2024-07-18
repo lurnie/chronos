@@ -50,6 +50,7 @@ async function returnPage(req, res, src, title=defaultTitle, parameters=new Obje
     // the current userId and username is always included in the parameters to send to the frontend
     parameters.userId = req.userId;
     parameters.username = req.username;
+    parameters.admin = req.admin;
     readFile(path + 'public/pages/' + src, 'utf-8', (err, content) => {
         if (err) {
             console.log(`500 Internal Server Error - failed to retrieve ${path+'public/pages/'+src}`);
@@ -81,17 +82,19 @@ readFile(path + 'public/pages/navbarGuest.html', 'utf-8', (err, content) => {
 app.use(express.urlencoded({extended: false}));
 
 async function getCurrentUser(req, res, next) {
-    req.username = undefined;
+    req.admin = false;
     if (req.cookies.session) {
         let session = await getSession(req.cookies.session);
-        if (!session) {req.userId = undefined;}
-        else {
+        if (session) {
             req.userId = session.user_id;
-            const {username} = await getUserById(req.userId);
-            req.username = username;
+            const user = await getUserById(req.userId);
+            req.username = user.username;
+
+            if (user.admin_privileges === 1) {
+                req.admin = true;
+            }
         }
     } else {
-        req.userId = undefined;
     }
     next();
 }
@@ -214,7 +217,7 @@ app.delete('/api/posts/:id', requireUserAuth, async (req, res) => {
         res.status(400).send('Error getting post');
         return;
     }
-    if (req.userId !== post.user_id) {res.status(401).send('You can only delete posts that you made'); return;}
+    if (req.userId !== post.user_id && !req.admin) {res.status(401).send('You can only delete posts that you made'); return;}
     let result = await deletePost(req.params.id);
     if (result === 400) {
         res.status(400).send('Unable to delete post')
@@ -241,7 +244,7 @@ app.get('/api/comments/:id', async (req, res) => {
 app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
     const comment = await getComment(req.params.id);
     if (comment === 400 || !comment) {res.status(400).send('Error getting comment'); return;}
-    if (req.userId !== comment.user_id) {res.status(401).send('You can only delete comments that you made'); return;}
+    if (req.userId !== comment.user_id && !req.admin) {res.status(401).send('You can only delete comments that you made'); return;}
     const result = await deleteComment(req.params.id);
     if (result === 400) {
         res.status(400).send('Unable to delete comment');
