@@ -127,7 +127,6 @@ async function getCurrentUser(req, res, next) {
                 req.admin = true;
             }
         }
-    } else {
     }
     next();
 }
