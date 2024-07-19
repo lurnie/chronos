@@ -115,6 +115,18 @@ function redirectIfLoggedIn(req, res, next) {
     if (!req.userId) {next();} else {res.redirect('/');}
 }
 
+function isAlphamumeric(string) {
+    for (let i = 0; i < string.length; i++) {
+        let code = string.charCodeAt(i);
+        if (!(
+            (code > 47 && code < 58) || // 0-9
+            (code > 64 && code < 91) || // A-Z
+            (code > 96 && code < 123) // a-z
+        )) {return false;}
+    }
+    return true;
+}
+
 app.get('/', async (req, res) => {
     res.redirect('/posts');
 })
@@ -128,6 +140,7 @@ app.post('/api/join', requireLoggedOut, async (req, res) => {
         const {username, password} = req.body;
         if (!username) {res.status(400).send('Missing username'); return;}
         if (!password) {res.status(400).send('Missing password'); return;}
+        if (!isAlphamumeric(username)) {res.status(400).send('Username can only be made up of numbers 0-9 or letters A-Z'); return;}
         if (username.length > 20) {res.status(400).send('Username cannot be longer than 20 characters.'); return;}
         if (password.length > 40) {res.status(400).send('Password cannot be longer than 40 characters.'); return;}
         if (password.length < 3) {res.status(400).send('Password must be at least 3 chars'); return;}

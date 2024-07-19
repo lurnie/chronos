@@ -41,6 +41,7 @@ form.addEventListener('submit', async (event) => {
         if (errorText === 'Missing username') {usernameError.textContent = 'Missing username.';}
         if (errorText === 'Missing password') {passwordError.textContent = 'Missing password.';}
         if (errorText === 'Password must be at least 3 chars') {passwordError.textContent = 'Password must be at least 3 characters.';}
+        if (errorText === 'Username can only be made up of numbers 0-9 or letters A-Z') {usernameError.textContent = 'Username can only be made up of numbers 0-9 or letters A-Z.';}
         if (passwordError.textContent === '' && usernameError.textContent === '') {usernameError.textContent = 'Unknown error. Reload page or try again.';}
     }
 });
