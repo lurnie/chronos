@@ -8,14 +8,18 @@ body {
 h1 {
     margin: 5px;
 }
-
+.user-posts-header {
+    margin: 30px;
+    margin-inline: auto;
+    width: 52%;
+}
 .user-container {
     width: 90%;
     margin-inline: auto;
     margin-block: 20px;
     background-color: rgb(239, 239, 239);
     border: solid 2px grey;
-    padding: 20px;
+    padding: 20px 40px;
 }
 .user-username {
     font-size: 120%;
