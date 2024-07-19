@@ -11,7 +11,6 @@ const pool = mysql.createPool({
 // TODO: properly catch the errors and return something that identifies them, rather than just 400
 
 async function getCommentsFromPost(id) {
-    //TODO: maybe remove the IS NULL requirement?
     const [results] = await pool.query(`SELECT comment_id, contents, post_id, parent_comment, comment.date_created, comment.user_id, user.username FROM comment JOIN user ON comment.user_id = user.user_id WHERE post_id = ? ORDER BY date_created`, [id]);
     return results;
 }
