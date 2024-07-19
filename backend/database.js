@@ -55,6 +55,10 @@ async function getAllPosts() {
     const [results] = await pool.query(`SELECT post_id, contents, post.date_created, post.user_id, user.username FROM post JOIN user ON post.user_id = user.user_id ORDER BY date_created DESC`);
     return results;
 }
+async function getPostsByUsername(username) {
+    const [results] = await pool.query(`SELECT post_id, contents, post.date_created, post.user_id, user.username FROM post JOIN user ON post.user_id = user.user_id WHERE user.username = ? ORDER BY date_created DESC`, [username]);
+    return results;
+}
 async function getPost(id) {
     const [results] = await pool.query(`SELECT post_id, contents, post.date_created, post.user_id, user.username FROM post JOIN user ON post.user_id = user.user_id WHERE post_id = ?`, [id]);
     return results[0];
@@ -181,5 +185,5 @@ async function deleteSession(userId) {
 }
 
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
-    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername
+    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername
 };

@@ -1,4 +1,6 @@
 import { getDateString } from "./getDateString.js";
+import { createPostElement } from "./postElement.js";
+const body = document.body;
 
 const container = document.querySelector('.user-container');
 const username = document.querySelector('.user-username');
@@ -12,3 +14,21 @@ if (params.user.admin_privileges) {
     admin.setAttribute('class', 'user-info user-admin');
     container.appendChild(admin);
 }
+
+async function getPosts() {
+    const response = await fetch(`/api/users/${params.user.username}/posts`);
+
+    if (!response.ok) {
+        throw new Error(response.status);
+    }
+
+    const json = await response.json();
+    return json;
+}
+
+getPosts().then((posts) => {
+    for (let post of posts) {
+        let postElement = createPostElement(post.post_id, post.contents, post.username, post.date_created, params.username, params.admin, true);
+        body.appendChild(postElement);
+    }
+});

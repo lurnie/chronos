@@ -29,7 +29,7 @@ if (params.userId) {
     userInput.setAttribute('contenteditable', 'true');
 
     const sendButton = document.createElement('button');
-    sendButton.setAttribute('class', 'send-button');
+    sendButton.setAttribute('class', 'post-button');
     sendButton.textContent = 'Send';
 
     inputPost.append(userInput, sendButton);

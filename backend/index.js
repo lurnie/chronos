@@ -14,7 +14,8 @@ const port = process.env.PORT;
 const path = '../frontend/';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
-    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername
+    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
+    getPostsByUsername
  } from './database.js';
 
 
@@ -267,6 +268,11 @@ app.get('/api/users/:username', async (req, res) => {
 app.get('/api/users/id/:id', async (req, res) => {
     const response = await safeGetUserById(req.params.id)
     if (response === 400) {res.status(400).send('Error getting user')}
+    res.send(response);
+});
+app.get('/api/users/:username/posts', async (req, res) => {
+    const response = await getPostsByUsername(req.params.username)
+    if (response === 400) {res.status(400).send('Error getting user posts')}
     res.send(response);
 });
 

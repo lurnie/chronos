@@ -56,14 +56,14 @@ function createReplyBox(parent, canDelete=true) {
     }
 
     const sendButton = document.createElement('button');
-    sendButton.setAttribute('class', 'send-button');
+    sendButton.setAttribute('class', 'post-button');
     sendButton.textContent = 'Send';
     box.append(input, sendButton);
 
 
     if (canDelete) {
         const cancelButton = document.createElement('button');
-        cancelButton.setAttribute('class', 'cancel-button');
+        cancelButton.setAttribute('class', 'post-button');
         cancelButton.textContent = 'Cancel';
 
 
@@ -179,8 +179,8 @@ function createReplyElement(id, contents, username, timestamp) {
             replyButton.remove();
             box.setAttribute('class', 'reply deleted');
             outerWrapper.style['margin'] = 0;
-            outerWrapper.nextSibling.style['margin-top'] = 0;
-            setTimeout(() => {outerWrapper.remove()}, 2000)
+            if (outerWrapper.nextSibling) {outerWrapper.nextSibling.style['margin-top'] = 0;}
+            setTimeout(() => {outerWrapper.remove(); console.log('hi');}, 1000);
         }
     });
 
