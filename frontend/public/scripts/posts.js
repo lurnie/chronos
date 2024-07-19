@@ -1,4 +1,5 @@
 import { createPostElement } from "./postElement.js";
+import { createErrorElement } from "./error.js";
 
 const body = document.querySelector('body');
 
@@ -64,6 +65,8 @@ if (params.userId) {
             let postElement = createPostElement(json.post_id, json.contents, json.username, json.date_created, params.username, params.admin, true);
             body.insertBefore(postElement, inputPost.nextSibling);
             userInput.textContent = '';
+        } else {
+            createErrorElement(response);
         }
     });
 }

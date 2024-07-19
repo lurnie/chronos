@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import cookieParser from 'cookie-parser';
 
 import {readFile} from 'fs';
+import {rateLimit} from 'express-rate-limit';
 
 const app = express();
 const port = process.env.PORT;
@@ -17,6 +18,37 @@ import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComm
     createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
     getPostsByUsername
  } from './database.js';
+
+
+ // rate limits
+ app.use('/api', rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    limit: 100,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: 'Too many API requests'
+}));
+app.use('/api/join', rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    limit: 10,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: 'You can only create 5 accounts in one hour'
+}));
+app.post('/api/posts', rateLimit({
+    windowMs: 3 * 60 * 1000, // 3 minutes
+    limit: 8,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: 'You are posting too much'
+}));
+app.post('/api/posts/:id/comments', rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    limit: 15,
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+    message: 'You are posting too many comments'
+}));
 
 
 app.use(express.static(path + 'public'));

@@ -8,6 +8,25 @@ body {
 h1 {
     margin: 5px;
 }
+.error-x-button {
+    border-radius: 10px;
+    border: none;
+    margin: 10px;
+    background: red;
+    padding: 2px;
+    font-size: 110%;
+}
+.error-x-button:hover {
+    background-color: rgb(190, 0, 0);
+}
+.error-header {
+    background-color: rgb(255, 169, 146);
+    border: solid 2px rgb(203, 68, 41);
+    padding: 10px;
+    position: fixed;
+    top: 20vh;
+    margin: 20px;
+}
 .user-posts-header {
     margin: 30px;
     margin-inline: auto;

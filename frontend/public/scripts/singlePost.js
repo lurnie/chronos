@@ -1,5 +1,6 @@
 import { createPostElement } from "./postElement.js";
 import { getDateString } from "./getDateString.js";
+import { createErrorElement } from "./error.js";
 
 const body = document.querySelector('body');
 
@@ -102,6 +103,8 @@ function createReplyBox(parent, canDelete=true) {
                 const parentElement = document.querySelector(`#comment-${json.parent_comment}`).parentNode;
                 parentElement.appendChild(newComment);
             }
+        } else {
+            createErrorElement(response);
         }
     });
 
