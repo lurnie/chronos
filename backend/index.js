@@ -20,35 +20,22 @@ import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComm
  } from './database.js';
 
 
+function createRateLimit(ms, limit, message) {
+    return rateLimit({
+        windowMs: ms,
+        limit: limit,
+        standardHeaders: 'draft-7',
+        legacyHeaders: false,
+        message: message
+    });
+}
+
  // rate limits
- app.use('/api', rateLimit({
-    windowMs: 5 * 60 * 1000, // 5 minutes
-    limit: 100,
-    standardHeaders: 'draft-7',
-    legacyHeaders: false,
-    message: 'Too many API requests'
-}));
-app.use('/api/join', rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    limit: 10,
-    standardHeaders: 'draft-7',
-    legacyHeaders: false,
-    message: 'You can only create 5 accounts in one hour'
-}));
-app.post('/api/posts', rateLimit({
-    windowMs: 3 * 60 * 1000, // 3 minutes
-    limit: 8,
-    standardHeaders: 'draft-7',
-    legacyHeaders: false,
-    message: 'You are posting too much'
-}));
-app.post('/api/posts/:id/comments', rateLimit({
-    windowMs: 5 * 60 * 1000, // 5 minutes
-    limit: 15,
-    standardHeaders: 'draft-7',
-    legacyHeaders: false,
-    message: 'You are posting too many comments'
-}));
+ app.use('/api', createRateLimit(5*60*1000, 100, 'Too many API requests'));
+app.use('/api/join', createRateLimit(60*60*1000, 10, 'You can only create 5 accounts in one hour'));
+app.post('/api/posts', createRateLimit(3*60*1000, 8, 'You are posting too much'));
+app.post('/api/posts/:id/comments', createRateLimit(5*60*1000, 15, 'You are posting too many comments'));
+
 
 
 app.use(express.static(path + 'public'));
