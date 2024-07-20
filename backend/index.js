@@ -22,6 +22,9 @@ const port = process.env.PORT;
 
 const path = '../frontend/';
 
+app.set('view engine', 'ejs')
+app.set('views', path + 'views');
+
 
 
 function createRateLimit(ms, limit, message) {
@@ -116,6 +119,11 @@ async function getCurrentUser(req, res, next) {
 
             if (user.admin_privileges === 1) {
                 req.admin = true;
+            }
+            req.user = {
+                userId: req.userId,
+                username: req.username,
+                admin: req.admin
             }
         }
     }
@@ -226,7 +234,9 @@ app.post('/api/logout', requireUserAuth, async (req, res) => {
 });
 
 app.get('/posts', async (req, res) => {
-    returnPage(req, res, 'posts.html', 'Posts');
+    let posts = await getAllPosts();
+    res.render('posts', {title: 'Posts', posts: posts, user: {userId: req.userId, username: req.username, admin: req.admin}});
+    //returnPage(req, res, 'posts.html', 'Posts');
 });
 app.get('/posts/:id', async (req, res) => {
     returnPage(req, res, 'single-post.html', 'Post', {id: req.params.id});
@@ -314,6 +324,11 @@ app.get('/api/users/:username/posts', async (req, res) => {
 app.get('*', (req, res) => {
     returnPage(req, res, '404.html', '404 Page Not Found', undefined, 404);
 })
+
+app.use((err, req, res, next) => {
+    console.log(err.stack);
+    res.status(500).send('500 Internal Server Error - failed to retrieve page')
+});
 
 app.listen(port, () => {
     console.log(`Listening on http://localhost:${port}`)

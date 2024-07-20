@@ -1,0 +1,12 @@
+<head>
+    <meta charset='utf-8'>
+    <title><%=title%> | LurnSite</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='/styles/main.css'>
+
+    <% if (user.userId === undefined) { %>
+        <script>let user = {userId: undefined, username: undefined, admin: false}</script>
+    <% } else { %>
+        <script>let user = JSON.parse('<%-JSON.stringify(user)%>')</script>
+    <% } %>
+</head>

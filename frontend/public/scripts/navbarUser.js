@@ -1,7 +1,6 @@
 const logout = document.querySelector('#logout');
 
 logout.addEventListener('click', async () => {
-
     const response = await fetch('/api/logout', {
         method: 'post',
         headers: {
@@ -12,7 +11,3 @@ logout.addEventListener('click', async () => {
         window.location.href = '/';
     }
 });
-
-const usernameElement = document.querySelector('#username');
-usernameElement.textContent = params.username;
-usernameElement.setAttribute('href', `/users/${params.username}`);
