@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <%- include('./partials/head.ejs') %>
+
+    <body>
+        <%- include('./partials/nav.ejs') %>
+        <%- include('./functions/getDateString.ejs') %>
+        <script>let viewingUser = JSON.parse('<%-JSON.stringify(viewingUser)%>')</script>
+
+        <div class="user-container">
+            <div class="user-username">@<%=viewingUser.username%></div>
+            <div class="user-info user-joined">Joined <%=getDateString(viewingUser.date_created)%></div>
+            <% if (viewingUser.admin_privileges) { %>
+                <div class="user-info user-admin">Admin</div>
+            <% } %>
+        </div>
+        <h1 class="user-posts-header">@<%=viewingUser.username%>'s posts:</h1>
+
+        <% if (viewingUser.username === user.username) { %>
+            <div class="post send-box">
+                <div class="post-user-input" contenteditable="true"></div>
+                <button class="post-button">Send</button>
+            </div>
+        <% } %>
+
+        <% posts.forEach(post => { %>
+            <%- include('./partials/reusable-post.ejs', {post: post}) %>
+        <% }) %>
+        <script src="/scripts/postInteractivity.js" type="module"></script>
+        <script src="/scripts/postSend.js" type="module"></script>
+    </body>
+</html>

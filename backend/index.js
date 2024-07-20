@@ -160,7 +160,7 @@ app.get('/', async (req, res) => {
 
 
 app.get('/join', redirectIfLoggedIn, async (req, res) => {
-    returnPage(req, res, 'join.html', 'Join');
+    res.render('join', {title: 'Join', user: req.user});
 });
 app.post('/api/join', requireLoggedOut, async (req, res) => {
     try {
@@ -187,7 +187,7 @@ app.post('/api/join', requireLoggedOut, async (req, res) => {
 })
 
 app.get('/login', redirectIfLoggedIn, async (req, res) => {
-    returnPage(req, res, 'login.html', 'Login');
+    res.render('login', {title: 'Login', user: req.user});
 });
 app.post('/api/login', requireLoggedOut, async (req, res) => {
     try {
@@ -299,7 +299,9 @@ app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
 app.get('/users/:username', async (req, res, next) => {
     const response = await safeGetUserByUsername(req.params.username)
     if (response === 400 || !response) {next(); return;}
-    returnPage(req, res, 'user.html', req.params.username, {user: response});
+    const posts = await getPostsByUsername(req.params.username)
+
+    res.render('user', {viewingUser: response, title: `@${response.username}`, posts: posts, user: req.user})
 });
 app.get('/api/users/:username', async (req, res) => {
     const response = await safeGetUserByUsername(req.params.username)

@@ -1,5 +1,6 @@
 import { getDateString } from "./getDateString.js";
 
+// TODO: decide what to do with this
 
 function createPostElement(id, contents, username, timestamp, viewerUsername, admin, link=false) {
     const div = document.createElement('div');
