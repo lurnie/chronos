@@ -67,7 +67,7 @@ function addHTMLBoilerplate(html, title, parameters) {
         <title>${title}</title>
         <script>let params = ${JSON.stringify(parameters)};</script>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <link rel='stylesheet' href='../styles/main.css'>
+        <link rel='stylesheet' href='/styles/main.css'>
     </head>
     <body>
         ${parameters.userId ? navbarUser : navbarGuest}
