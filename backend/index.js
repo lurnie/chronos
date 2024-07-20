@@ -15,6 +15,7 @@ import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComm
     createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
     getPostsByUsername
 } from './database.js';
+import { ClientRequest } from 'http';
 
 // create app
 const app = express();
@@ -120,13 +121,9 @@ async function getCurrentUser(req, res, next) {
             if (user.admin_privileges === 1) {
                 req.admin = true;
             }
-            req.user = {
-                userId: req.userId,
-                username: req.username,
-                admin: req.admin
-            }
         }
     }
+    req.user = {userId: req.userId, username: req.username, admin: req.admin};
     next();
 }
 app.use(getCurrentUser);
@@ -235,8 +232,7 @@ app.post('/api/logout', requireUserAuth, async (req, res) => {
 
 app.get('/posts', async (req, res) => {
     let posts = await getAllPosts();
-    res.render('posts', {title: 'Posts', posts: posts, user: {userId: req.userId, username: req.username, admin: req.admin}});
-    //returnPage(req, res, 'posts.html', 'Posts');
+    res.render('posts', {title: 'Posts', posts: posts, user: req.user});
 });
 app.get('/posts/:id', async (req, res) => {
     returnPage(req, res, 'single-post.html', 'Post', {id: req.params.id});

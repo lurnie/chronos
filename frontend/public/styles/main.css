@@ -60,7 +60,8 @@ h1 {
     }
 }
 .dropdown.open .content {
-    display: block;
+    display: flex;
+    flex-direction: column;
 }
 .content {
     display: none;
@@ -74,6 +75,7 @@ h1 {
     border: none;
     background: none;
     padding: 5px;
+    text-align: left;
     a {
         text-decoration: none;
         color: inherit;

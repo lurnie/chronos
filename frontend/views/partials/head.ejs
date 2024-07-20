@@ -5,8 +5,8 @@
     <link rel='stylesheet' href='/styles/main.css'>
 
     <% if (user.userId === undefined) { %>
-        <script>let user = {userId: undefined, username: undefined, admin: false}</script>
+        <script>var user = {userId: undefined, username: undefined, admin: false}</script>
     <% } else { %>
-        <script>let user = JSON.parse('<%-JSON.stringify(user)%>')</script>
+        <script>var user = JSON.parse('<%-JSON.stringify(user)%>')</script>
     <% } %>
 </head>
