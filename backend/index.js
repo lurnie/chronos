@@ -1,3 +1,4 @@
+
 import 'dotenv/config';
 import express from 'express';
 
@@ -7,17 +8,20 @@ import crypto from 'crypto';
 import cookieParser from 'cookie-parser';
 
 import {readFile} from 'fs';
+
 import {rateLimit} from 'express-rate-limit';
 
+import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
+    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
+    getPostsByUsername
+} from './database.js';
+
+// create app
 const app = express();
 const port = process.env.PORT;
 
 const path = '../frontend/';
 
-import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
-    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
-    getPostsByUsername
- } from './database.js';
 
 
 function createRateLimit(ms, limit, message) {
