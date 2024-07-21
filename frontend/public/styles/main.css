@@ -8,6 +8,13 @@ body {
 h1 {
     margin: 5px;
 }
+.error-page {
+    width: fit-content;
+    text-align: center;
+    margin: 10px;
+    margin-inline: auto;
+    font-size: 150%;
+}
 .error-x-button {
     border-radius: 10px;
     border: none;

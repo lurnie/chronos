@@ -320,7 +320,7 @@ app.get('/api/users/:username/posts', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    returnPage(req, res, '404.html', '404 Page Not Found', undefined, 404);
+    res.render('404', {title: '404 Page Not Found', user: req.user})
 })
 
 app.use((err, req, res, next) => {
