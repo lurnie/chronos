@@ -51,62 +51,6 @@ app.use(express.static(path + 'public'));
 app.use(express.json());
 app.use(cookieParser());
 
-function addHTMLBoilerplate(html, title, parameters) {
-    // TODO: do this in a better way or replace this completely?
-
-    return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset='utf-8'>
-        <title>${title}</title>
-        <script>let params = ${JSON.stringify(parameters)};</script>
-        <meta name='viewport' content='width=device-width, initial-scale=1'>
-        <link rel='stylesheet' href='/styles/main.css'>
-    </head>
-    <body>
-        ${parameters.userId ? navbarUser : navbarGuest}
-        ${html}
-    </body>
-    </html>
-    `
-}
-
-const defaultTitle = 'LurnSite';
-
-async function returnPage(req, res, src, title=defaultTitle, parameters=new Object(), status=200) {
-    // the current userId and username is always included in the parameters to send to the frontend
-    parameters.userId = req.userId;
-    parameters.username = req.username;
-    parameters.admin = req.admin;
-    readFile(path + 'public/pages/' + src, 'utf-8', (err, content) => {
-        if (err) {
-            console.log(`500 Internal Server Error - failed to retrieve ${path+'public/pages/'+src}`);
-            res.status(500).send('500 Internal Server Error - page could not be retrieved');
-        } else {
-            let html = addHTMLBoilerplate(content, title, parameters);
-            res.status(status).send(html);
-        }
-    })
-}
-
-let navbarUser;
-readFile(path + 'public/pages/navbarUser.html', 'utf-8', (err, content) => {
-    if (err) {
-        navbarUser = '';
-    } else {
-        navbarUser = content;
-    }
-});
-let navbarGuest;
-readFile(path + 'public/pages/navbarGuest.html', 'utf-8', (err, content) => {
-    if (err) {
-        navbarGuest = '';
-    } else {
-        navbarGuest = content;
-    }
-});
-
 app.use(express.urlencoded({extended: false}));
 
 async function getCurrentUser(req, res, next) {
@@ -231,11 +175,12 @@ app.post('/api/logout', requireUserAuth, async (req, res) => {
 });
 
 app.get('/posts', async (req, res) => {
-    let posts = await getAllPosts();
-    res.render('posts', {title: 'Posts', posts: posts, user: req.user});
+    const posts = await getAllPosts();
+    res.render('posts', {title: 'Posts', posts: posts, user: req.user, postLink: true});
 });
 app.get('/posts/:id', async (req, res) => {
-    returnPage(req, res, 'single-post.html', 'Post', {id: req.params.id});
+    const post = await getPost(req.params.id);
+    res.render('single-post', {title: 'Post', post: post, user: req.user, postLink: false});
 });
 app.post('/api/posts', requireUserAuth, async (req, res) => {
     const {contents} = req.body;
@@ -300,8 +245,7 @@ app.get('/users/:username', async (req, res, next) => {
     const response = await safeGetUserByUsername(req.params.username)
     if (response === 400 || !response) {next(); return;}
     const posts = await getPostsByUsername(req.params.username)
-
-    res.render('user', {viewingUser: response, title: `@${response.username}`, posts: posts, user: req.user})
+    res.render('user', {viewingUser: response, title: `@${response.username}`, posts: posts, postLink: true, user: req.user});
 });
 app.get('/api/users/:username', async (req, res) => {
     const response = await safeGetUserByUsername(req.params.username)
@@ -320,7 +264,7 @@ app.get('/api/users/:username/posts', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.render('404', {title: '404 Page Not Found', user: req.user})
+    res.render('404', {title: '404 Page Not Found', user: req.user});
 })
 
 app.use((err, req, res, next) => {

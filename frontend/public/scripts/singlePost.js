@@ -3,21 +3,9 @@ import { getDateString } from "./getDateString.js";
 import { createErrorElement } from "./error.js";
 
 const body = document.querySelector('body');
+let upperReplyBox = document.querySelector('.comment-input-container');
+const commentContainer = document.querySelector('.comment-container');
 
-async function getPost(id) {
-    try {
-        const response = await fetch(`/api/posts/${id}`);
-        if (!response.ok) {
-            throw new Error(response.status);
-        }
-
-        const json = await response.json();
-        return json;
-    } catch (err) {
-        console.log(err);
-        return undefined;
-    }
-}
 
 async function getComments(postId) {
     try {
@@ -33,6 +21,40 @@ async function getComments(postId) {
         console.log(err);
         return undefined;
     }
+}
+
+function makeSendReplyButtonFunctional(replyBox, parent=null) {
+    const sendButton = replyBox.querySelector('.post-button');
+    const input = replyBox.querySelector('.post-user-input')
+    sendButton.addEventListener('click', async () => {
+        if (input.textContent === '') {
+            return;
+        }
+        const userInput = input.textContent;
+        const response = await fetch(`/api/posts/${post.post_id}/comments`, {
+            method: 'post',
+            body: JSON.stringify({
+                contents: userInput,
+                parentId: parent
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+        if (response.ok) {
+            input.textContent = '';
+            let json = await response.json();
+            const newComment = createReplyElement(json.comment_id, json.contents, json.username, json.date_created);
+            if (json.parent_comment === null) {
+                commentContainer.insertBefore(newComment, upperReplyBox.nextSibling);
+            } else {
+                const parentElement = document.querySelector(`#comment-${json.parent_comment}`).parentNode;
+                parentElement.appendChild(newComment);
+            }
+        } else {
+            createErrorElement(response);
+        }
+    });
 }
 
 function createReplyBox(parent, canDelete=true) {
@@ -78,35 +100,7 @@ function createReplyBox(parent, canDelete=true) {
         box.appendChild(cancelButton);
     }
 
-    sendButton.addEventListener('click', async () => {
-        if (input.textContent === '') {
-            return;
-        }
-        const userInput = input.textContent;
-        const response = await fetch(`/api/posts/${params.id}/comments`, {
-            method: 'post',
-            body: JSON.stringify({
-                contents: userInput,
-                parentId: parent
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            }
-        });
-        if (response.ok) {
-            input.textContent = '';
-            let json = await response.json();
-            const newComment = createReplyElement(json.comment_id, json.contents, json.username, json.date_created);
-            if (json.parent_comment === null) {
-                body.insertBefore(newComment, upperReplyBox.nextSibling);
-            } else {
-                const parentElement = document.querySelector(`#comment-${json.parent_comment}`).parentNode;
-                parentElement.appendChild(newComment);
-            }
-        } else {
-            createErrorElement(response);
-        }
-    });
+    makeSendReplyButtonFunctional(outerWrapper, parent);
 
 
     return outerWrapper;
@@ -171,7 +165,7 @@ function createReplyElement(id, contents, username, timestamp) {
     const replyButton = document.createElement('span');
 
     deleteButton.addEventListener('click', async () => {
-        if (username !== params.username && !params.admin) {return;}
+        if (username !== user.username && !user.admin) {return;}
         let confirmDelete = confirm('Are you sure you want to delete this post?');
         if (!confirmDelete) {return;}
         const response = await fetch(`/api/comments/${id}`, {
@@ -187,7 +181,7 @@ function createReplyElement(id, contents, username, timestamp) {
         }
     });
 
-    if (params.userId) {
+    if (user.userId) {
         replyButton.textContent = 'Reply';
         replyButton.setAttribute('class', 'reply-button');
 
@@ -201,39 +195,15 @@ function createReplyElement(id, contents, username, timestamp) {
     return outerWrapper;
 };
 
-let postExists = true;
 
-await getPost(params.id).then( (postData) => {
-    if (postData === undefined) {
-        //TODO: make a better error message
-        const error = document.createElement('div');
-        error.textContent = 'Could not find post.';
-        body.appendChild(error);
-        postExists = false;
-        return;
-    }
-    const post = createPostElement(postData.post_id, postData.contents, postData.username, postData.date_created, params.username, params.admin);
-
-    body.appendChild(post);
-});
-
-let upperReplyBox ;
-if (postExists) {
-    if (params.userId) {
-        upperReplyBox = createReplyBox(null, false);
-    } else {
-        upperReplyBox = document.createElement('div');
-    }
-    body.appendChild(upperReplyBox);
-}
-
-await getComments(params.id).then((comments) => {
+makeSendReplyButtonFunctional(upperReplyBox);
+await getComments(post.post_id).then((comments) => {
     if (comments === undefined) {return;}
     for (let comment of comments) {
         const reply = createReplyElement(comment.comment_id, comment.contents, comment.username, comment.date_created);
 
         if (comment.parent_comment === null) {
-            body.insertBefore(reply, upperReplyBox.nextSibling);
+            commentContainer.insertBefore(reply, upperReplyBox.nextSibling);
         } else {
             const parent = document.querySelector(`#comment-${comment.parent_comment}`).parentNode;
             parent.appendChild(reply);

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <%-include('./partials/head.ejs')%>
+    <body>
+        <%-include('./partials/nav.ejs')%>
+        <%-include('./functions/getDateString.ejs') %>
+
+        <%-include('./partials/reusable-post.ejs')%>
+        <div class="comment-container">
+            <ul class="comment-input-container">
+                <div class="reply input-box">
+                    <div class="post-user-input" contenteditable="true"></div>
+                    <button class="post-button">Send</button>
+                </div>
+            </ul>
+        </div>
+
+        <script>let post = JSON.parse('<%-JSON.stringify(post)%>')</script>
+        <script src='/scripts/postInteractivity.js' type="module"></script>
+        <script src='/scripts/singlePost.js' type="module"></script>
+    </body>
+</html>
