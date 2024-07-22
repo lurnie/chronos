@@ -1,7 +1,4 @@
-import { createPostElement } from "./postElement.js";
 import { createErrorElement } from "./error.js";
-
-const body = document.querySelector('body');
 
 if (user.userId) {
     const inputPost = document.querySelector('.post.send-box');
@@ -34,9 +31,7 @@ if (user.userId) {
         });
         if (response.ok) {
             let json = await response.json();
-            let postElement = createPostElement(json.post_id, json.contents, json.username, json.date_created, user.username, user.admin, true);
-            body.insertBefore(postElement, inputPost.nextSibling);
-            userInput.textContent = '';
+            window.location.href = `/posts/${json.post_id}`;
         } else {
             createErrorElement(response);
         }

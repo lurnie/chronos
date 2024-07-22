@@ -1,4 +1,3 @@
-import { createPostElement } from "./postElement.js";
 import { getDateString } from "./getDateString.js";
 import { createErrorElement } from "./error.js";
 
