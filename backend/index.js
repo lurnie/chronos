@@ -178,8 +178,10 @@ app.get('/posts', async (req, res) => {
     const posts = await getAllPosts();
     res.render('posts', {title: 'Posts', posts: posts, user: req.user, postLink: true});
 });
-app.get('/posts/:id', async (req, res) => {
+app.get('/posts/:id', async (req, res, next) => {
     const post = await getPost(req.params.id);
+    if (post === undefined) {next(); return;}
+
     res.render('single-post', {title: 'Post', post: post, user: req.user, postLink: false});
 });
 app.post('/api/posts', requireUserAuth, async (req, res) => {
