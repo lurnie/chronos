@@ -43,7 +43,7 @@ form.addEventListener('submit', async (event) => {
         if (errorText === 'Password must be at least 3 chars') {passwordError.textContent = 'Password must be at least 3 characters.';}
         if (errorText === 'Username can only be made up of numbers 0-9 or letters A-Z') {usernameError.textContent = 'Username can only be made up of numbers 0-9 or letters A-Z.';}
         if (errorText === 'You can only create 5 accounts in one hour') {usernameError.textContent = 'You can only create 10 accounts in one hour.';}
-
+         if (errorText === 'Password cannot have spaces') {passwordError.textContent = 'Password cannot have spaces';}
         if (passwordError.textContent === '' && usernameError.textContent === '') {usernameError.textContent = 'Unknown error. Reload page or try again.';}
     }
 });

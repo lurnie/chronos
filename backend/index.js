@@ -106,12 +106,18 @@ app.get('/', async (req, res) => {
 app.get('/join', redirectIfLoggedIn, async (req, res) => {
     res.render('join', {title: 'Join', user: req.user});
 });
+
+function hasWhiteSpace(str) {
+    return (/\s/).test(str);
+}
+
 app.post('/api/join', requireLoggedOut, async (req, res) => {
     try {
         const {username, password} = req.body;
         if (!username) {res.status(400).send('Missing username'); return;}
         if (!password) {res.status(400).send('Missing password'); return;}
         if (!isAlphamumeric(username)) {res.status(400).send('Username can only be made up of numbers 0-9 or letters A-Z'); return;}
+        if (hasWhiteSpace(password)) {res.status(400).send('Password cannot have spaces'); return;}
         if (username.length > 20) {res.status(400).send('Username cannot be longer than 20 characters.'); return;}
         if (password.length > 40) {res.status(400).send('Password cannot be longer than 40 characters.'); return;}
         if (password.length < 3) {res.status(400).send('Password must be at least 3 chars'); return;}
