@@ -23,7 +23,7 @@ if (user.userId) {
         const response = await fetch('/api/posts', {
             method: 'POST',
             body: JSON.stringify({
-                contents: userInput.textContent
+                contents: userInput.innerText
             }),
             headers: {
                 'Content-type': 'application/json; charset=UTF-8'

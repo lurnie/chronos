@@ -26,10 +26,10 @@ function makeSendReplyButtonFunctional(replyBox, parent=null) {
     const sendButton = replyBox.querySelector('.post-button');
     const input = replyBox.querySelector('.post-user-input')
     sendButton.addEventListener('click', async () => {
-        if (input.textContent === '') {
+        if (input.innerText === '') {
             return;
         }
-        const userInput = input.textContent;
+        const userInput = input.innerText;
         const response = await fetch(`/api/posts/${post.post_id}/comments`, {
             method: 'post',
             body: JSON.stringify({
@@ -113,6 +113,7 @@ function createReplyElement(id, contents, username, timestamp) {
 
     const commentContent = document.createElement('span');
     commentContent.textContent = contents;
+    commentContent.setAttribute('class', 'comment-content');
     const timestampElement = document.createElement('span');
 
     timestampElement.textContent = getDateString(timestamp);
@@ -176,7 +177,7 @@ function createReplyElement(id, contents, username, timestamp) {
             box.setAttribute('class', 'reply deleted');
             outerWrapper.style['margin'] = 0;
             if (outerWrapper.nextSibling) {outerWrapper.nextSibling.style['margin-top'] = 0;}
-            setTimeout(() => {outerWrapper.remove(); console.log('hi');}, 1000);
+            setTimeout(() => {outerWrapper.remove();}, 1000);
         }
     });
 
