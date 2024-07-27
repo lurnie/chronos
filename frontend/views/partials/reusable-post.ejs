@@ -11,14 +11,16 @@
     <%if (postLink) { %>
     </a>
     <% } %>
-
-    <div id="dropdown-<%=post.post_id%>" class="dropdown">
-        <button class="dropdown-button">...</button>
-        <div class="content">
-            <% if (user.username === post.username || user.admin) { %>
-                <button class="dropdown-element delete-post">Delete</button>
-            <% } %>
-            <button class="dropdown-element"><a href="/users/<%=post.username%>">Go To Profile</a></button>
+    <div class="post-bottom">
+        <div id="dropdown-<%=post.post_id%>" class="dropdown">
+            <button class="dropdown-button">...</button>
+            <div class="content">
+                <% if (user.username === post.username || user.admin) { %>
+                    <button class="dropdown-element delete-post">Delete</button>
+                <% } %>
+                <button class="dropdown-element"><a href="/users/<%=post.username%>">Go To Profile</a></button>
+            </div>
         </div>
+        <%-include('heart.ejs') %>
     </div>
 </div>

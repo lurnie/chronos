@@ -183,6 +183,28 @@ async function deleteSession(userId) {
     }
 }
 
+async function addLove(postId, userId) {
+    if (postId === undefined || userId === undefined) {return 400;}
+    try {
+        await pool.query('INSERT INTO love VALUES(?, ?)', [postId, userId])
+    } catch (err) {
+        console.log(err);
+        return 400;
+    }
+}
+async function getLovesByPost(postId) {
+    const [results] = await pool.query('SELECT user_id FROM love WHERE post_id = ?', [postId]);
+    return results;
+}
+async function getLovesByUserId(userId) {
+    const [results] = await pool.query('SELECT post_id FROM love WHERE user_id = ?', [userId]);
+    return results;
+}
+async function getLovesByUsername(username) {
+    const [results] = await pool.query('SELECT post_id FROM love WHERE user_id IN (SELECT user_id FROM user WHERE username = ?)', [username]);
+    return results;
+}
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
-    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername
+    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername, addLove,
+    getLovesByPost, getLovesByUserId, getLovesByUsername
 };

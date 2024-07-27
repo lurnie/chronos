@@ -29,3 +29,11 @@ CREATE TABLE comment (
     FOREIGN KEY (parent_comment) REFERENCES comment(comment_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
+
+CREATE TABLE love (
+    post_id INT,
+    user_id INT,
+    PRIMARY KEY (post_id, user_id),
+    FOREIGN KEY love(post_id) REFERENCES post(post_id) ON DELETE CASCADE,
+    FOREIGN KEY love(user_id) REFERENCES user(user_id) ON DELETE CASCADE
+);

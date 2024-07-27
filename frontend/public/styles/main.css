@@ -8,6 +8,20 @@ body {
 h1 {
     margin: 5px;
 }
+.heart {
+    width: 20px;
+    height: auto;
+    margin-left: auto;
+    margin-right: 50px;
+    fill: #474747;
+    transition: 0.1s;
+}
+.heart:hover {
+    fill: #6e6e6e;
+}
+.post-bottom {
+    display: flex;
+}
 .error-page {
     width: fit-content;
     text-align: center;
