@@ -201,10 +201,10 @@ app.post('/api/posts', requireUserAuth, async (req, res) => {
 })
 
 app.get('/api/posts', async (req, res) => {
-    res.send(await getAllPosts());
+    res.json(await getAllPosts());
 });
 app.get('/api/posts/:id', async (req, res) => {
-    res.send(await getPost(req.params.id));
+    res.json(await getPost(req.params.id));
 });
 app.delete('/api/posts/:id', requireUserAuth, async (req, res) => {
     let post = await getPost(req.params.id);
@@ -221,7 +221,7 @@ app.delete('/api/posts/:id', requireUserAuth, async (req, res) => {
     }
 })
 app.get('/api/posts/:id/comments', async (req, res) => {
-    res.send(await getCommentsFromPost(req.params.id));
+    res.json(await getCommentsFromPost(req.params.id));
 });
 app.post('/api/posts/:id/comments', requireUserAuth, async (req, res) => {
     const {contents, parentId} = req.body;
@@ -234,7 +234,7 @@ app.post('/api/posts/:id/comments', requireUserAuth, async (req, res) => {
 });
 
 app.get('/api/comments/:id', async (req, res) => {
-    res.send(await getComment(req.params.id));
+    res.json(await getComment(req.params.id));
 });
 app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
     const comment = await getComment(req.params.id);
@@ -258,17 +258,17 @@ app.get('/users/:username', async (req, res, next) => {
 app.get('/api/users/:username', async (req, res) => {
     const response = await safeGetUserByUsername(req.params.username)
     if (response === 400) {res.status(400).send('Error getting user')}
-    res.send(response);
+    res.json(response);
 });
 app.get('/api/users/id/:id', async (req, res) => {
     const response = await safeGetUserById(req.params.id)
     if (response === 400) {res.status(400).send('Error getting user')}
-    res.send(response);
+    res.json(response);
 });
 app.get('/api/users/:username/posts', async (req, res) => {
     const response = await getPostsByUsername(req.params.username)
     if (response === 400) {res.status(400).send('Error getting user posts')}
-    res.send(response);
+    res.json(response);
 });
 
 app.get('*', (req, res) => {
