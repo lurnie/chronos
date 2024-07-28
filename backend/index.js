@@ -13,7 +13,7 @@ import {rateLimit} from 'express-rate-limit';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
-    getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove
+    getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists
 } from './database.js';
 import { ClientRequest } from 'http';
 
@@ -223,6 +223,10 @@ app.delete('/api/posts/:id', requireUserAuth, async (req, res) => {
 
 app.get('/api/posts/:id/loves', async (req, res) => {
     res.json(await getLovesByPost(req.params.id));
+});
+app.get('/api/posts/:postId/loves/:userId', async (req, res) => {
+    const exists = await loveExists(req.params.postId, req.params.userId);
+    res.json({"loveExists": exists});
 });
 app.get('/api/users/:username/loves', async (req, res) => {
     res.send(await getLovesByUsername(req.params.username));

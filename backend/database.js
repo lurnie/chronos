@@ -205,8 +205,8 @@ async function deleteLove(postId, userId) {
     }
 }
 async function loveExists(postId, userId) {
-    const {result} = await pool.query('SELECT * FROM love WHERE post_id = ?, user_ud = ?', [postId, userId]);
-    if (result.length > 1) {return true;} else {return false;}
+    const result = await pool.query('SELECT * FROM love WHERE post_id = ? AND user_id = ?', [postId, userId]);
+    if (result[0].length > 0) {return true;} else {return false;}
 }
 async function getLovesByPost(postId) {
     const [results] = await pool.query('SELECT user_id FROM love WHERE post_id = ?', [postId]);
