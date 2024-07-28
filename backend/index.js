@@ -164,7 +164,7 @@ app.post('/api/login', requireLoggedOut, async (req, res) => {
                     res.send('Logged in');
                 }
             } else {
-                res.status(401).send('Incorrect password')
+                res.status(401).send('Incorrect password');
             }
         }
     } catch (err) {
@@ -239,7 +239,7 @@ app.post('/api/posts/:id/loves', requireUserAuth, async (req, res) => {
     if (typeof(result) === 'object') {
         const code = result.code;
         if (code === 'ER_DUP_ENTRY') {
-            res.send('Post is already loved')
+            res.send('Post is already loved');
         } else {
             res.status(400).send('Could not love post');
         }
@@ -286,24 +286,24 @@ app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
 
 
 app.get('/users/:username', async (req, res, next) => {
-    const response = await safeGetUserByUsername(req.params.username)
+    const response = await safeGetUserByUsername(req.params.username);
     if (response === 400 || !response) {next(); return;}
-    const posts = await getPostsByUsername(req.params.username)
+    const posts = await getPostsByUsername(req.params.username);
     res.render('user', {viewingUser: response, title: `@${response.username}`, posts: posts, postLink: true, user: req.user});
 });
 app.get('/api/users/:username', async (req, res) => {
-    const response = await safeGetUserByUsername(req.params.username)
-    if (response === 400) {res.status(400).send('Error getting user')}
+    const response = await safeGetUserByUsername(req.params.username);
+    if (response === 400) {res.status(400).send('Error getting user');}
     res.json(response);
 });
 app.get('/api/users/id/:id', async (req, res) => {
-    const response = await safeGetUserById(req.params.id)
-    if (response === 400) {res.status(400).send('Error getting user')}
+    const response = await safeGetUserById(req.params.id);
+    if (response === 400) {res.status(400).send('Error getting user');}
     res.json(response);
 });
 app.get('/api/users/:username/posts', async (req, res) => {
-    const response = await getPostsByUsername(req.params.username)
-    if (response === 400) {res.status(400).send('Error getting user posts')}
+    const response = await getPostsByUsername(req.params.username);
+    if (response === 400) {res.status(400).send('Error getting user posts');}
     res.json(response);
 });
 
@@ -313,9 +313,9 @@ app.get('*', (req, res) => {
 
 app.use((err, req, res, next) => {
     console.log(err.stack);
-    res.status(500).send('500 Internal Server Error - failed to retrieve page')
+    res.status(500).send('500 Internal Server Error - failed to retrieve page');
 });
 
 app.listen(port, () => {
-    console.log(`Listening on http://localhost:${port}`)
+    console.log(`Listening on http://localhost:${port}`);
 });
