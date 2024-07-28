@@ -215,9 +215,9 @@ app.delete('/api/posts/:id', requireUserAuth, async (req, res) => {
     if (req.userId !== post.user_id && !req.admin) {res.status(401).send('You can only delete posts that you made'); return;}
     let result = await deletePost(req.params.id);
     if (result === 400) {
-        res.status(400).send('Unable to delete post')
+        res.status(400).send('Unable to delete post');
     } else {
-        res.send('Post deleted')
+        res.send('Post deleted');
     }
 });
 
