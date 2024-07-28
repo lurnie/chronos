@@ -13,7 +13,7 @@ import {rateLimit} from 'express-rate-limit';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
-    getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername
+    getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove
 } from './database.js';
 import { ClientRequest } from 'http';
 
@@ -232,12 +232,25 @@ app.get('/api/users/id/:id/loves', async (req, res) => {
 });
 app.post('/api/posts/:id/loves', requireUserAuth, async (req, res) => {
     const result = await addLove(req.params.id, req.userId);
-    if (result === 400) {
-        res.status(400).send('Could not love post');
+    if (typeof(result) === 'object') {
+        const code = result.code;
+        if (code === 'ER_DUP_ENTRY') {
+            res.send('Post is already loved')
+        } else {
+            res.status(400).send('Could not love post');
+        }
     } else {
         res.send('Loved post');
     }
 });
+app.delete('/api/posts/:id/loves', requireUserAuth, async (req, res) => {
+    const result = await deleteLove(req.params.id, req.userId);
+    if (result === 400) {
+        res.status(400).send('Could not unlove post');
+    } else {
+        res.send('Unloved post');
+    }
+})
 
 app.get('/api/posts/:id/comments', async (req, res) => {
     res.json(await getCommentsFromPost(req.params.id));

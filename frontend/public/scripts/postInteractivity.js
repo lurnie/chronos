@@ -1,3 +1,5 @@
+import { createErrorElement } from "./error.js";
+
 const body = document.querySelector('body');
 
 document.querySelectorAll('.post').forEach((post) => {
@@ -43,4 +45,30 @@ document.querySelectorAll('.post').forEach((post) => {
         });
     }
 
+
+    const loveButton = post.querySelector('.heart');
+
+    loveButton.addEventListener('click', async () => {
+        const loved = (loveButton.getAttribute('class') === 'heart loved');
+        let method;
+        if (loved) {
+            method = 'DELETE';
+            loveButton.setAttribute('class', 'heart');
+        } else {
+            method = 'POST';
+            loveButton.setAttribute('class', 'heart loved');
+
+        }
+        const response = await fetch(`/api/posts/${id}/loves`, {
+            method: method,
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+        if (response.ok) {
+
+        } else {
+            createErrorElement(response);
+        }
+    });
 });

@@ -188,9 +188,25 @@ async function addLove(postId, userId) {
     try {
         await pool.query('INSERT INTO love VALUES(?, ?)', [postId, userId])
     } catch (err) {
+        const code = err.code;
+        if (!code === 'ER_DUP_ENTRY') {
+            console.log(err);
+        }
+        return err;
+    }
+}
+async function deleteLove(postId, userId) {
+    if (postId === undefined || userId === undefined) {return 400;}
+    try {
+        await pool.query('DELETE FROM love WHERE post_id = ? AND user_id = ?', [postId, userId]);
+    } catch (err) {
         console.log(err);
         return 400;
     }
+}
+async function loveExists(postId, userId) {
+    const {result} = await pool.query('SELECT * FROM love WHERE post_id = ?, user_ud = ?', [postId, userId]);
+    if (result.length > 1) {return true;} else {return false;}
 }
 async function getLovesByPost(postId) {
     const [results] = await pool.query('SELECT user_id FROM love WHERE post_id = ?', [postId]);
@@ -206,5 +222,5 @@ async function getLovesByUsername(username) {
 }
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
     getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername, addLove,
-    getLovesByPost, getLovesByUserId, getLovesByUsername
+    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists
 };

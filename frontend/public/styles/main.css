@@ -19,6 +19,12 @@ h1 {
 .heart:hover {
     fill: #6e6e6e;
 }
+.heart.loved {
+    fill: #de4b4b;
+}
+.heart.loved:hover {
+    fill: #d86b6b;
+}
 .post-bottom {
     display: flex;
 }
