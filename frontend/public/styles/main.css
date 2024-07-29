@@ -8,11 +8,17 @@ body {
 h1 {
     margin: 5px;
 }
+.stat {
+    margin-left: 5px;
+}
+.stats-container {
+    margin-left: auto;
+    margin-right: 50px;
+    display: flex;
+}
 .heart {
     width: 20px;
     height: auto;
-    margin-left: auto;
-    margin-right: 50px;
     fill: #474747;
     transition: 0.1s;
 }

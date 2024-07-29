@@ -21,6 +21,9 @@
                 <button class="dropdown-element"><a href="/users/<%=post.username%>">Go To Profile</a></button>
             </div>
         </div>
-        <%-include('heart.ejs') %>
+        <span class="stats-container">
+            <%-include('heart.ejs') %>
+            <span class="stat"><%=post.loves%></span>
+        </span>
     </div>
 </div>
