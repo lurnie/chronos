@@ -75,7 +75,7 @@ h1 {
     width: 52%;
 }
 .user-container {
-    width: 90%;
+    max-width: 90%;
     margin-inline: auto;
     margin-block: 20px;
     background-color: rgb(239, 239, 239);
@@ -245,7 +245,7 @@ h1 {
     transition: max-height 1s, margin-block 1s, padding-block 1s, opacity 2s;
     display: block;
     width: 50%;
-    max-height: 50em;
+    max-height: 30em;
     margin: 30px;
     margin-inline: auto;
     padding: 20px;
@@ -257,7 +257,7 @@ h1 {
 .post-content {
     white-space: pre-wrap;
     display: block;
-    max-height: 40em;
+    max-height: 22em;
     overflow: scroll;
 }
 .post-date {
@@ -318,6 +318,19 @@ h1 {
             padding: 16px;
             justify-content: flex-end;
             margin-left: auto;
+        }
+        @media only screen and (max-width: 700px) {
+            padding-left: 0;
+            width: 100%;
+            * {
+                padding-inline: 6px;
+            }
+            .website-name {
+                padding-left: 10px;
+            }
+        }
+        @media only screen and (max-width: 400px) {
+            font-size: 94%;
         }
     }
 }
