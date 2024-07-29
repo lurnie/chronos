@@ -51,15 +51,15 @@ async function createComment(postId, content, userId, parentId=null) {
 }
 // note: currently, loves are gotten by counting the number of entries in the love table, but this might be bad for performance
 async function getAllPosts() {
-    const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, COUNT(love.post_id) AS loves FROM post JOIN user ON post.user_id = user.user_id LEFT JOIN love ON post.post_id = love.post_id GROUP BY post.post_id ORDER BY date_created DESC`);
+    const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, (SELECT COUNT(*) FROM love WHERE post.post_id = love.post_id) AS loves, (SELECT COUNT(*) FROM comment WHERE post.post_id = comment.post_id) AS comments FROM post JOIN user ON post.user_id = user.user_id ORDER BY date_created DESC`);
     return results;
 }
 async function getPostsByUsername(username) {
-    const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, COUNT(love.post_id) AS loves FROM post JOIN user ON post.user_id = user.user_id LEFT JOIN love ON post.post_id = love.post_id WHERE user.username = ? GROUP BY post.post_id ORDER BY date_created DESC`, [username]);
+    const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, (SELECT COUNT(*) FROM love WHERE post.post_id = love.post_id) AS loves, (SELECT COUNT(*) FROM comment WHERE post.post_id = comment.post_id) AS comments FROM post JOIN user ON post.user_id = user.user_id WHERE user.username = ? ORDER BY date_created DESC`, [username]);
     return results;
 }
 async function getPost(id) {
-    const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, COUNT(love.post_id) AS loves FROM post JOIN user ON post.user_id = user.user_id LEFT JOIN love ON post.post_id = love.post_id WHERE post.post_id = ?`, [id]);
+    const [results] = await pool.query(`SELECT post.post_id, post.contents, post.date_created, post.user_id, user.username, (SELECT COUNT(*) FROM love WHERE post.post_id = love.post_id) AS loves, (SELECT COUNT(*) FROM comment WHERE post.post_id = comment.post_id) AS comments FROM post JOIN user ON post.user_id = user.user_id WHERE post.post_id = ?`, [id]);
     return results[0];
 }
 async function createPost(content, userId) {

@@ -13,7 +13,7 @@ const body = document.querySelector('body');
 
 document.querySelectorAll('.post').forEach((post) => {
     const dropdown = post.querySelector('.dropdown');
-    if (!dropdown) {return;} // this is the input field because it has no dropdown
+    if (!dropdown) {return;} // this is the input field because it has no dropdown, so it should be ignored
 
     // hides the dropdown when you click on the button
     dropdown.addEventListener('click', () => {
