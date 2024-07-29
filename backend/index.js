@@ -7,15 +7,12 @@ import crypto from 'crypto';
 
 import cookieParser from 'cookie-parser';
 
-import {readFile} from 'fs';
-
 import {rateLimit} from 'express-rate-limit';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
     getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists
 } from './database.js';
-import { ClientRequest } from 'http';
 
 // create app
 const app = express();
