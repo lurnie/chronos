@@ -79,6 +79,7 @@ document.querySelectorAll('.post').forEach((post) => {
     window.addEventListener('scroll', setLoveStatus);
     setLoveStatus(); // runs once on page load so that you don't have to scroll in order for the currently visible posts to check if they're loved or not
 
+    const stats = loveButton.nextElementSibling;
     loveButton.addEventListener('click', async () => {
         const loved = (loveButton.getAttribute('class') === 'heart loved');
         let method;
@@ -97,7 +98,7 @@ document.querySelectorAll('.post').forEach((post) => {
             }
         });
         if (response.ok) {
-
+            if (method === 'POST') {stats.textContent++;} else {stats.textContent--;} // automatically updates the like counter
         } else {
             createErrorElement(response);
         }
