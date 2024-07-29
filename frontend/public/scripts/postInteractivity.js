@@ -1,5 +1,14 @@
 import { createErrorElement } from "./error.js";
 
+function isInView(element) {
+    let rect = element.getBoundingClientRect();
+    let top = rect.top;
+    let bottom = rect.bottom;
+
+    let inView = top < window.innerHeight && bottom >= 0
+    return inView;
+}
+
 const body = document.querySelector('body');
 
 document.querySelectorAll('.post').forEach((post) => {
@@ -47,6 +56,28 @@ document.querySelectorAll('.post').forEach((post) => {
 
 
     const loveButton = post.querySelector('.heart');
+
+    let done = false;
+
+    const setLoveStatus = () => {
+        // if the post is in view, it checks whether the post was loved or not
+        // if it's already checked before, then it immediately returns
+        if (done) {return;}
+        if (isInView(post)) {
+            done = true;
+            fetch(`/api/posts/${id}/loves/${user.userId}`).then(async (result) => {
+                let json = await result.json();
+                if (json.loveExists) {
+                    loveButton.setAttribute('class', 'heart loved');
+                } else {
+                    loveButton.setAttribute('class', 'heart');
+                }
+            });
+        }
+    };
+
+    window.addEventListener('scroll', setLoveStatus);
+    setLoveStatus(); // runs once on page load so that you don't have to scroll in order for the currently visible posts to check if they're loved or not
 
     loveButton.addEventListener('click', async () => {
         const loved = (loveButton.getAttribute('class') === 'heart loved');
