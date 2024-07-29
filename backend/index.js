@@ -39,7 +39,7 @@ function createRateLimit(ms, limit, message) {
 }
 
  // rate limits
- app.use('/api', createRateLimit(5*60*1000, 100, 'Too many API requests'));
+ app.use('/api', createRateLimit(0.25*60*1000, 200, 'Too many API requests'));
 app.use('/api/join', createRateLimit(60*60*1000, 10, 'You can only create 5 accounts in one hour'));
 app.post('/api/posts', createRateLimit(3*60*1000, 8, 'You are posting too much'));
 app.post('/api/posts/:id/comments', createRateLimit(5*60*1000, 15, 'You are posting too many comments'));
