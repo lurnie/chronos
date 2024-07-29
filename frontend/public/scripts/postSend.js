@@ -1,7 +1,8 @@
 import { createErrorElement } from "./error.js";
 
-if (user.userId) {
+function addInput() {
     const inputPost = document.querySelector('.post.send-box');
+    if (!inputPost) {return;}
     const userInput = inputPost.querySelector('.post-user-input');
     const sendButton = inputPost.querySelector('.post-button')
 
@@ -37,3 +38,5 @@ if (user.userId) {
         }
     });
 }
+
+if (user.userId) {addInput()}
