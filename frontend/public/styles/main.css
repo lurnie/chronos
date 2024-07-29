@@ -25,6 +25,9 @@ h1 {
 .heart.loved:hover {
     fill: #d86b6b;
 }
+.heart.unloaded {
+    fill: #a4a4a4;
+}
 .post-bottom {
     display: flex;
 }
