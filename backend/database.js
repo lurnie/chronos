@@ -100,7 +100,8 @@ async function createUser(username, hashedPassword) {
         return err;
     }
 }
-async function getUserById(userId) {
+// these are "unsafe" because all user data, including private information, will be returned
+async function unsafeGetUserById(userId) {
     if (userId === undefined) {return 400;}
     try {
         const [result] = await pool.query('SELECT * FROM user WHERE user_id = ?', [userId]);
@@ -110,7 +111,7 @@ async function getUserById(userId) {
         return 400;
     }
 }
-async function getUserByUsername(username) {
+async function unsafeGetUserByUsername(username) {
     if (username === undefined) {return 400;}
     try {
         const [result] = await pool.query('SELECT * FROM user WHERE username = ?', [username]);
@@ -221,6 +222,6 @@ async function getLovesByUsername(username) {
     return results;
 }
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
-    getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername, addLove,
+    unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername, addLove,
     getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists
 };

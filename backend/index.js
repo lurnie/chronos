@@ -10,7 +10,7 @@ import cookieParser from 'cookie-parser';
 import {rateLimit} from 'express-rate-limit';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
-    createUser, getUserById, getUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
+    createUser, unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
     getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists
 } from './database.js';
 
@@ -56,7 +56,7 @@ async function getCurrentUser(req, res, next) {
         let session = await getSession(req.cookies.session);
         if (session) {
             req.userId = session.user_id;
-            const user = await getUserById(req.userId);
+            const user = await safeGetUserById(req.userId);
             req.username = user.username;
 
             if (user.admin_privileges === 1) {
@@ -142,7 +142,7 @@ app.post('/api/login', requireLoggedOut, async (req, res) => {
         if (!username) {res.status(400).send('Missing username'); return;}
         if (!password) {res.status(400).send('Missing password'); return;}
 
-        let user = await getUserByUsername(username);
+        let user = await unsafeGetUserByUsername(username);
         if (user === undefined) {
             res.status(401).send('User not found');
         } else {
