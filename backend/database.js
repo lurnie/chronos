@@ -96,7 +96,7 @@ async function createUser(username, hashedPassword) {
         const userId = result[0].insertId;
         return userId;
     } catch (err) {
-        console.log(err);
+        // since errors will be common and reported to the user, they won't be logged here
         return err;
     }
 }
