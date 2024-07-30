@@ -1,5 +1,6 @@
 # Chronos
 Chronos is a simple social media created using [Express.js](https://github.com/expressjs/express). It supports user creation, posts, commenting, and loves, among other features.
+
 <img src="./frontend/public/images/screenshot.png" width="800"/>
 
 ## Use
