@@ -1,0 +1,18 @@
+<% if (maxPages > 1) { %>
+    <div class="post-aligned">
+        <% if (page === 1) { %>
+        <% } else { %>
+            <a class="list-link" href="/users/<%=viewingUser.username%>?page=<%=page-1%>">&ltprevious</a>
+        <% } %>
+        <% for (let pageNum = 1; pageNum <= maxPages; pageNum++) { %>
+            <% if (page === pageNum) { %>
+                <span class="selected-page"><%=pageNum%></span>
+            <% } else { %>
+                <a class="list-link" href="/users/<%=viewingUser.username%>?page=<%=pageNum%>"><%=pageNum%></a>
+            <% } %>
+        <% } %>
+        <% if (page < maxPages) { %>
+            <a class="list-link" href="/users/<%=viewingUser.username%>?page=<%=page+1%>">next&gt</a>
+        <% } %>
+    </div>
+<% } %>
