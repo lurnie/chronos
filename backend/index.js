@@ -281,11 +281,16 @@ app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
     }
 });
 
+const maxPostsPerUserPage = 5;
 
 app.get('/users/:username', async (req, res, next) => {
     const response = await safeGetUserByUsername(req.params.username);
     if (response === 400 || !response) {next(); return;}
-    const posts = await getPostsByUsername(req.params.username);
+
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+    const posts = await getPostsByUsername(req.params.username, maxPostsPerUserPage, (page-1)*maxPostsPerUserPage);
+
     res.render('user', {viewingUser: response, title: `@${response.username}`, posts: posts, postLink: true, user: req.user});
 });
 app.get('/api/users/:username', async (req, res) => {
@@ -299,7 +304,9 @@ app.get('/api/users/id/:id', async (req, res) => {
     res.json(response);
 });
 app.get('/api/users/:username/posts', async (req, res) => {
-    const response = await getPostsByUsername(req.params.username);
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+    const response = await getPostsByUsername(req.params.username, maxPostsPerUserPage, (page-1)*maxPostsPerUserPage);
     if (response === 400) {res.status(400).send('Error getting user posts');}
     res.json(response);
 });
