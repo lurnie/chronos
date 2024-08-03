@@ -177,9 +177,15 @@ app.post('/api/logout', requireUserAuth, async (req, res) => {
 
 });
 
+const maxPostsPerFeed = 20;
+const maxPostsPerUserPage = 20;
+
 app.get('/posts', async (req, res) => {
-    const posts = await getAllPosts();
-    res.render('posts', {title: 'Posts', posts: posts, user: req.user, postLink: true});
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+
+    const posts = await getAllPosts(maxPostsPerFeed, (page-1)*maxPostsPerFeed);
+    res.render('posts', {title: 'Posts', posts: posts, maxPages: 10, page: page, user: req.user, postLink: true});
 });
 app.get('/posts/:id', async (req, res, next) => {
     const post = await getPost(req.params.id);
@@ -198,7 +204,10 @@ app.post('/api/posts', requireUserAuth, async (req, res) => {
 })
 
 app.get('/api/posts', async (req, res) => {
-    res.json(await getAllPosts());
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+
+    res.json(await getAllPosts(maxPostsPerFeed, (page-1)*maxPostsPerFeed));
 });
 app.get('/api/posts/:id', async (req, res) => {
     res.json(await getPost(req.params.id));
@@ -280,8 +289,6 @@ app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
         res.status(200).send('Comment deleted');
     }
 });
-
-const maxPostsPerUserPage = 20;
 
 app.get('/users/:username', async (req, res, next) => {
     const response = await safeGetUserByUsername(req.params.username);
