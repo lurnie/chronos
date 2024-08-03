@@ -104,7 +104,7 @@ async function createUser(username, hashedPassword) {
 async function unsafeGetUserById(userId) {
     if (userId === undefined) {return 400;}
     try {
-        const [result] = await pool.query('SELECT * FROM user WHERE user_id = ?', [userId]);
+        const [result] = await pool.query('SELECT *, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE user_id = ?', [userId]);
         return result[0];
     } catch (err) {
         console.log(err);
@@ -114,7 +114,7 @@ async function unsafeGetUserById(userId) {
 async function unsafeGetUserByUsername(username) {
     if (username === undefined) {return 400;}
     try {
-        const [result] = await pool.query('SELECT * FROM user WHERE username = ?', [username]);
+        const [result] = await pool.query('SELECT *, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE username = ?', [username]);
         return result[0];
     } catch (err) {
         console.log(err);
@@ -126,7 +126,7 @@ async function unsafeGetUserByUsername(username) {
 async function safeGetUserById(userId) {
     if (userId === undefined) {return 400;}
     try {
-        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created FROM user WHERE user_id = ?', [userId]);
+        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE user_id = ?', [userId]);
         return result[0];
     } catch (err) {
         console.log(err);
@@ -136,7 +136,7 @@ async function safeGetUserById(userId) {
 async function safeGetUserByUsername(username) {
     if (username === undefined) {return 400;}
     try {
-        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created FROM user WHERE username = ?', [username]);
+        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE username = ?', [username]);
         return result[0];
     } catch (err) {
         console.log(err);
