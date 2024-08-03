@@ -281,7 +281,7 @@ app.delete('/api/comments/:id', requireUserAuth, async (req, res) => {
     }
 });
 
-const maxPostsPerUserPage = 5;
+const maxPostsPerUserPage = 20;
 
 app.get('/users/:username', async (req, res, next) => {
     const response = await safeGetUserByUsername(req.params.username);
@@ -291,7 +291,7 @@ app.get('/users/:username', async (req, res, next) => {
     if (isNaN(page) || page < 1) {page = 1;}
     const posts = await getPostsByUsername(req.params.username, maxPostsPerUserPage, (page-1)*maxPostsPerUserPage);
 
-    res.render('user', {viewingUser: response, title: `@${response.username}`, posts: posts, postLink: true, user: req.user});
+    res.render('user', {viewingUser: response, title: `@${response.username}`, posts: posts, maxPages: Math.ceil(response.posts/maxPostsPerUserPage), page: page, postLink: true, user: req.user});
 });
 app.get('/api/users/:username', async (req, res) => {
     const response = await safeGetUserByUsername(req.params.username);

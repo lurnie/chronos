@@ -232,6 +232,21 @@ h1 {
     opacity: 0%;
 
 }
+.selected-page {
+    font-weight: bold;
+}
+.list-link {
+    text-decoration: none;
+    color: rgb(132, 58, 202);
+}
+.list-link:hover {
+    text-decoration: underline;
+}
+.post-aligned {
+    display: block;
+    width: 50%;
+    margin-inline: auto;
+}
 .post.deleted {
     background-color: rgb(239, 186, 186);
     box-shadow: 0 0 3px 1px rgb(144, 79, 79);
@@ -272,7 +287,6 @@ h1 {
 }
 
 .post.send-box {
-    margin-top: 0;
     margin-bottom: 50px;
 }
 .post-send-box:focus-within {
