@@ -7,6 +7,7 @@
     <%- include('./functions/getDateString.ejs') %>
 
     <h1>Posts</h1>
+
     <% if (user.userId) { %>
         <div class="post send-box">
             <div class="post-user-input" contenteditable="true"></div>
@@ -16,6 +17,10 @@
     <% posts.forEach(post => { %>
         <%- include('./partials/reusable-post.ejs', {post: post}) %>
     <% }) %>
+
+    <%- include('./partials/page-nav.ejs', {url: '/posts'}) %>
+    <br>
+
     <script src="/scripts/postInteractivity.js" type="module"></script>
     <script src='/scripts/postSend.js' type="module"></script>
 </body>

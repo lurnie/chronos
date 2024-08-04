@@ -11,7 +11,8 @@ import {rateLimit} from 'express-rate-limit';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
-    getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists
+    getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists,
+    getTotalPostsNumber
 } from './database.js';
 
 // create app
@@ -185,7 +186,8 @@ app.get('/posts', async (req, res) => {
     if (isNaN(page) || page < 1) {page = 1;}
 
     const posts = await getAllPosts(maxPostsPerFeed, (page-1)*maxPostsPerFeed);
-    res.render('posts', {title: 'Posts', posts: posts, maxPages: 10, page: page, user: req.user, postLink: true});
+    const postsNumber = await getTotalPostsNumber();
+    res.render('posts', {title: 'Posts', posts: posts, maxPages: Math.ceil(postsNumber/maxPostsPerFeed), page: page, user: req.user, postLink: true});
 });
 app.get('/posts/:id', async (req, res, next) => {
     const post = await getPost(req.params.id);
