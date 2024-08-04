@@ -51,8 +51,8 @@ async function createComment(postId, content, userId, parentId=null) {
 }
 
 async function getTotalPostsNumber() {
-    const [results] = await pool.query('SELECT COUNT(*) FROM post');
-    return results;
+    const [[{posts}]] = await pool.query('SELECT COUNT(*) AS posts FROM post');
+    return posts;
 }
 
 // note: currently, loves are gotten by counting the number of entries in the love table, but this might be bad for performance
