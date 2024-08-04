@@ -49,6 +49,12 @@ async function createComment(postId, content, userId, parentId=null) {
         return 400;
     }
 }
+
+async function getTotalPostsNumber() {
+    const [results] = await pool.query('SELECT COUNT(*) FROM post');
+    return results;
+}
+
 // note: currently, loves are gotten by counting the number of entries in the love table, but this might be bad for performance
 async function getAllPosts(limit=10, offset=0) {
     const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, (SELECT COUNT(*) FROM love WHERE post.post_id = love.post_id) AS loves, (SELECT COUNT(*) FROM comment WHERE post.post_id = comment.post_id) AS comments FROM post JOIN user ON post.user_id = user.user_id ORDER BY date_created DESC LIMIT ? OFFSET ?`, [limit, offset]);
@@ -223,5 +229,5 @@ async function getLovesByUsername(username) {
 }
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
     unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername, addLove,
-    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists
+    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber
 };
