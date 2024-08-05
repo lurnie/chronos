@@ -90,6 +90,9 @@ h1 {
     font-style: italic;
     margin-top: 5px;
 }
+.user-bio {
+    margin-top: 10px;
+}
 
 .dropdown {
     display: inline-block;

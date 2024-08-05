@@ -3,7 +3,8 @@ CREATE TABLE user (
     username VARCHAR(20) UNIQUE NOT NULL,
     hash BINARY(60),
     admin_privileges tinyint(1) DEFAULT(0),
-    date_created DATETIME DEFAULT NOW()
+    date_created DATETIME DEFAULT NOW(),
+    bio VARCHAR(100)
 );
 CREATE TABLE session (
     user_id INT PRIMARY KEY,

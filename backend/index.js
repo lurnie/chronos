@@ -12,7 +12,8 @@ import {rateLimit} from 'express-rate-limit';
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
     getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists,
-    getTotalPostsNumber
+    getTotalPostsNumber,
+    updateBio
 } from './database.js';
 
 // create app

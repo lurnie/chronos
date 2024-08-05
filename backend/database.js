@@ -106,6 +106,13 @@ async function createUser(username, hashedPassword) {
         return err;
     }
 }
+async function updateBio(userId, newBio) {
+    try {
+        const result = await pool.query('UPDATE user SET bio = ? WHERE user_id = ?', [newBio, userId])
+    } catch (err) {
+        return err;
+    }
+}
 // these are "unsafe" because all user data, including private information, will be returned
 async function unsafeGetUserById(userId) {
     if (userId === undefined) {return 400;}
@@ -132,7 +139,7 @@ async function unsafeGetUserByUsername(username) {
 async function safeGetUserById(userId) {
     if (userId === undefined) {return 400;}
     try {
-        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE user_id = ?', [userId]);
+        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, bio, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE user_id = ?', [userId]);
         return result[0];
     } catch (err) {
         console.log(err);
@@ -142,7 +149,7 @@ async function safeGetUserById(userId) {
 async function safeGetUserByUsername(username) {
     if (username === undefined) {return 400;}
     try {
-        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE username = ?', [username]);
+        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, bio, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE username = ?', [username]);
         return result[0];
     } catch (err) {
         console.log(err);
@@ -229,5 +236,5 @@ async function getLovesByUsername(username) {
 }
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
     unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername, addLove,
-    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber
+    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber, updateBio
 };

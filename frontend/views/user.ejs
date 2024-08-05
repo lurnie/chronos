@@ -13,6 +13,13 @@
             <% if (viewingUser.admin_privileges) { %>
                 <div class="user-info user-admin">Admin</div>
             <% } %>
+            <% if (viewingUser.username === user.username) { %>
+                <input type="text" class="user-bio" value="<%=viewingUser.bio%>"></input>
+            <% } else { %>
+                <% if (viewingUser.bio) { %>
+                    <div class="user-info"><%=viewingUser.bio%></div>
+                <% } %>
+            <% } %>
         </div>
         <h1 class="user-posts-header">@<%=viewingUser.username%>'s posts:</h1>
 
