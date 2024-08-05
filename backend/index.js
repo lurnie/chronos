@@ -15,6 +15,7 @@ import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComm
     getTotalPostsNumber,
     updateBio
 } from './database.js';
+import { type } from 'os';
 
 // create app
 const app = express();
@@ -243,6 +244,20 @@ app.get('/api/users/:username/loves', async (req, res) => {
 app.get('/api/users/id/:id/loves', async (req, res) => {
     res.send(await getLovesByUserId(req.params.id));
 });
+app.post('/api/users/:username/bio', async (req, res) => {
+    if (req.username !== req.params.username) {
+        res.status(400).send(`You do not have permission to change this user's bio`);
+        return;
+    }
+    const {bio} = req.body;
+    const result = await updateBio(req.username, bio);
+    if (typeof(result) === 'Object') {
+        console.log(result);
+        res.status(400).send('Unable to update bio');
+    } else {
+        res.send('Updated bio');
+    }
+})
 app.post('/api/posts/:id/loves', requireUserAuth, async (req, res) => {
     const result = await addLove(req.params.id, req.userId);
     if (typeof(result) === 'object') {

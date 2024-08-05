@@ -106,9 +106,9 @@ async function createUser(username, hashedPassword) {
         return err;
     }
 }
-async function updateBio(userId, newBio) {
+async function updateBio(username, newBio) {
     try {
-        const result = await pool.query('UPDATE user SET bio = ? WHERE user_id = ?', [newBio, userId])
+        await pool.query('UPDATE user SET bio = ? WHERE username = ?', [newBio, username])
     } catch (err) {
         return err;
     }
