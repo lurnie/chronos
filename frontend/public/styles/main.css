@@ -92,6 +92,13 @@ h1 {
 }
 .user-bio {
     margin-top: 10px;
+    padding: 8px;
+    border: dashed 2px black;
+    border-radius: 5px;
+}
+.user-bio:focus {
+    border: blue 2px solid;
+    outline: none;
 }
 
 .dropdown {
