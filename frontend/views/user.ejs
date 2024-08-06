@@ -22,8 +22,9 @@
                     <% } %>
                 <% } %>
             </div>
-
-            <button class="follow-button">Follow</button>
+            <% if (viewingUser.user_id !== user.userId && user.userId) { %>
+                <button class="follow-button">Follow</button>
+            <% } %>
         </div>
         <h1 class="user-posts-header">@<%=viewingUser.username%>'s posts:</h1>
 
