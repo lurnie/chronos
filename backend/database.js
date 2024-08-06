@@ -55,11 +55,40 @@ async function getTotalPostsNumber() {
     return posts;
 }
 
+async function addFollower(followerId, followingId) {
+    //if (followerId === followingId) {return false;}
+    try {
+        await pool.query('INSERT INTO follow(follower_id, following_id) VALUES(?, ?)', [followerId, followingId]);
+        return true;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+}
+async function removeFollower(followerId, followingId) {
+    try {
+        await pool.query('DELETE FROM follow WHERE follower_id = ? AND following_id = ?', [followerId, followingId]);
+        return true;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+}
+async function getFollowings(userId) {
+    const [results] = await pool.query('SELECT following_id AS user_id FROM follow WHERE follower_id = ?', [userId]);
+    return results;
+}
+async function getFollowers(userId) {
+    const [results] = await pool.query('SELECT follower_id AS user_id FROM follow WHERE following_id = ?', [userId]);
+    return results;
+}
+
 // note: currently, loves are gotten by counting the number of entries in the love table, but this might be bad for performance
 async function getAllPosts(limit=10, offset=0) {
     const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, (SELECT COUNT(*) FROM love WHERE post.post_id = love.post_id) AS loves, (SELECT COUNT(*) FROM comment WHERE post.post_id = comment.post_id) AS comments FROM post JOIN user ON post.user_id = user.user_id ORDER BY date_created DESC LIMIT ? OFFSET ?`, [limit, offset]);
     return results;
 }
+
 async function getPostsByUsername(username, limit=10, offset=0) {
     const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, (SELECT COUNT(*) FROM love WHERE post.post_id = love.post_id) AS loves, (SELECT COUNT(*) FROM comment WHERE post.post_id = comment.post_id) AS comments FROM post JOIN user ON post.user_id = user.user_id WHERE user.username = ? ORDER BY date_created DESC LIMIT ? OFFSET ?`, [username, limit, offset]);
     return results;
@@ -236,5 +265,5 @@ async function getLovesByUsername(username) {
 }
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
     unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername, addLove,
-    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber, updateBio
+    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber, updateBio, addFollower, removeFollower, getFollowers, getFollowings
 };

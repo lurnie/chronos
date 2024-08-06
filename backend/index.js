@@ -12,8 +12,7 @@ import {rateLimit} from 'express-rate-limit';
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
     getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists,
-    getTotalPostsNumber,
-    updateBio
+    getTotalPostsNumber, updateBio, addFollower, removeFollower, getFollowers, getFollowings
 } from './database.js';
 import { type } from 'os';
 
@@ -25,8 +24,6 @@ const path = '../frontend/';
 
 app.set('view engine', 'ejs')
 app.set('views', path + 'views');
-
-
 
 function createRateLimit(ms, limit, message) {
     return rateLimit({

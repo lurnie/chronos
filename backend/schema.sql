@@ -38,3 +38,10 @@ CREATE TABLE love (
     FOREIGN KEY love(post_id) REFERENCES post(post_id) ON DELETE CASCADE,
     FOREIGN KEY love(user_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
+CREATE TABLE follow (
+    follower_id INT,
+    following_id INT,
+    FOREIGN KEY (follower_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (following_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    PRIMARY KEY(follower_id, following_id)
+);
