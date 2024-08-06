@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<%- include('./partials/head.ejs') %>
+
+<body>
+    <%- include('./partials/nav.ejs') %>
+    <%- include('./functions/getDateString.ejs') %>
+
+    <h1>Feed</h1>
+
+    <% if (user.userId) { %>
+        <div class="post send-box">
+            <div class="post-user-input" contenteditable="true"></div>
+            <button class="post-button">Send</button>
+        </div>
+    <% } %>
+    <% if (posts.length > 0) { %>
+        <% posts.forEach(post => { %>
+            <%- include('./partials/reusable-post.ejs', {post: post}) %>
+        <% }) %>
+        <%- include('./partials/page-nav.ejs', {url: '/feed'}) %>
+    <% } else { %>
+        <h1 class="post-aligned">Start following users to see them appear in your feed!</h1>
+    <% } %>
+
+    <br>
+
+    <script src="/scripts/postInteractivity.js" type="module"></script>
+    <script src='/scripts/postSend.js' type="module"></script>
+</body>
+</html>

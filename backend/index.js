@@ -188,6 +188,13 @@ app.get('/posts', async (req, res) => {
     const postsNumber = await getTotalPostsNumber();
     res.render('posts', {title: 'Posts', posts: posts, maxPages: Math.ceil(postsNumber/maxPostsPerFeed), page: page, user: req.user, postLink: true});
 });
+app.get('/feed', requireUserAuth, async (req, res) => {
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+    const posts = await getFollowerFeed(req.userId, maxPostsPerFeed, (page-1)*maxPostsPerFeed);
+    const maxPages = 4;
+    res.render('feed', {title: 'Feed', posts: posts, maxPages: maxPages, page: page, user: req.user, postLink: true});
+});
 app.get('/posts/:id', async (req, res, next) => {
     const post = await getPost(req.params.id);
     if (post === undefined) {next(); return;}
@@ -203,7 +210,12 @@ app.post('/api/posts', requireUserAuth, async (req, res) => {
         res.send(result);
     }
 })
+app.get('/api/feed', requireUserAuth, async (req, res) => {
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
 
+    res.json(await getFollowerFeed(req.userId, maxPostsPerFeed, (page-1)*maxPostsPerFeed));
+});
 app.get('/api/posts', async (req, res) => {
     let page = Number(req.query.page);
     if (isNaN(page) || page < 1) {page = 1;}
