@@ -25,7 +25,6 @@ const path = '../frontend/';
 app.set('view engine', 'ejs')
 app.set('views', path + 'views');
 
-addFollower(7, 7)
 function createRateLimit(ms, limit, message) {
     return rateLimit({
         windowMs: ms,
