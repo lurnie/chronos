@@ -12,9 +12,8 @@ import {rateLimit} from 'express-rate-limit';
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
     getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber, updateBio,
-    addFollower, removeFollower, getFollowers, getFollowings, getFollowerFeed, followExists
+    addFollower, removeFollower, getFollowers, getFollowings, getFollowerFeed, followExists, getFeedSize
 } from './database.js';
-import { type } from 'os';
 
 // create app
 const app = express();
@@ -192,8 +191,8 @@ app.get('/feed', requireUserAuth, async (req, res) => {
     let page = Number(req.query.page);
     if (isNaN(page) || page < 1) {page = 1;}
     const posts = await getFollowerFeed(req.userId, maxPostsPerFeed, (page-1)*maxPostsPerFeed);
-    const maxPages = 4;
-    res.render('feed', {title: 'Feed', posts: posts, maxPages: maxPages, page: page, user: req.user, postLink: true});
+    const postsNumber = await getFeedSize(req.userId);
+    res.render('feed', {title: 'Feed', posts: posts, maxPages: Math.ceil(postsNumber/maxPostsPerFeed), page: page, user: req.user, postLink: true});
 });
 app.get('/posts/:id', async (req, res, next) => {
     const post = await getPost(req.params.id);
