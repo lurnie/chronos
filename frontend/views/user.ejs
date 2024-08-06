@@ -8,18 +8,22 @@
         <script>let viewingUser = JSON.parse('<%-JSON.stringify(viewingUser)%>')</script>
 
         <div class="user-container">
-            <div class="user-username">@<%=viewingUser.username%></div>
-            <div class="user-info user-joined">Joined <%=getDateString(viewingUser.date_created)%></div>
-            <% if (viewingUser.admin_privileges) { %>
-                <div class="user-info user-admin">Admin</div>
-            <% } %>
-            <% if (viewingUser.username === user.username) { %>
-                <input type="text" autocomplete="off" class="user-bio" value="<%=viewingUser.bio%>"></input>
-            <% } else { %>
-                <% if (viewingUser.bio) { %>
-                    <div class="user-info"><%=viewingUser.bio%></div>
+            <div>
+                <div class="user-username">@<%=viewingUser.username%></div>
+                <div class="user-info user-joined">Joined <%=getDateString(viewingUser.date_created)%></div>
+                <% if (viewingUser.admin_privileges) { %>
+                    <div class="user-info user-admin">Admin</div>
                 <% } %>
-            <% } %>
+                <% if (viewingUser.username === user.username) { %>
+                    <input type="text" autocomplete="off" class="user-bio" value="<%=viewingUser.bio%>"></input>
+                <% } else { %>
+                    <% if (viewingUser.bio) { %>
+                        <div class="user-info"><%=viewingUser.bio%></div>
+                    <% } %>
+                <% } %>
+            </div>
+
+            <button class="follow-button">Follow</button>
         </div>
         <h1 class="user-posts-header">@<%=viewingUser.username%>'s posts:</h1>
 

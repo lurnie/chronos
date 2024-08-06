@@ -55,14 +55,17 @@ async function getTotalPostsNumber() {
     return posts;
 }
 
+async function followExists(followerId, followingId) {
+    const result = await pool.query('SELECT * FROM follow WHERE follower_id = ? AND following_id = ?', [followerId, followingId]);
+    if (result[0].length > 0) {return true;} else {return false;}
+}
+
 async function addFollower(followerId, followingId) {
-    if (followerId === followingId) {return false;} // TODO: prevent this in the database itself?
     try {
         await pool.query('INSERT INTO follow(follower_id, following_id) VALUES(?, ?)', [followerId, followingId]);
-        return true;
+        return 200;
     } catch (err) {
-        console.log(err);
-        return false;
+        return err;
     }
 }
 async function removeFollower(followerId, followingId) {
@@ -272,5 +275,6 @@ async function getLovesByUsername(username) {
 }
 export {getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment, createUser,
     unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername, getPostsByUsername, addLove,
-    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber, updateBio, addFollower, removeFollower, getFollowers, getFollowings, getFollowerFeed
+    getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber, updateBio, addFollower, removeFollower, getFollowers, getFollowings, getFollowerFeed,
+    followExists
 };

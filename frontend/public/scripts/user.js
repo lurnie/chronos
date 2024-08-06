@@ -20,3 +20,48 @@ if (bioInput) {
         }
     });
 }
+
+const followButton = document.querySelector('.follow-button');
+
+fetch(`/api/users/id/${user.userId}/follows/${viewingUser.user_id}`).then((result) => {
+    result.json().then((json) => {
+        if (json.following) {
+            followButton.textContent = 'Following';
+            followButton.setAttribute('class', 'follow-button followed');
+        } else {
+            followButton.textContent = 'Follow';
+            followButton.setAttribute('class', 'follow-button');
+        }
+    })
+
+});
+
+if (followButton) {
+    followButton.addEventListener('click', async () => {
+        let following = followButton.getAttribute('class') === 'follow-button followed'
+        let method;
+        if (following) {
+            method = 'DELETE';
+        } else {
+            method = 'POST';
+        }
+        const response = await fetch(`/api/users/id/${viewingUser.user_id}/follows`, {
+            method: method,
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            }
+        });
+
+        if (response.ok) {
+            if (following === false) {
+                followButton.textContent = 'Following';
+                followButton.setAttribute('class', 'follow-button followed');
+            } else {
+                followButton.textContent = 'Follow';
+                followButton.setAttribute('class', 'follow-button');
+            }
+        } else {
+            createErrorElement(response);
+        }
+    })
+}

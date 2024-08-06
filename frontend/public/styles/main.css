@@ -74,7 +74,25 @@ h1 {
     margin-inline: auto;
     width: 52%;
 }
+.follow-button {
+    font-size: 1rem;
+    padding-block: 5px;
+    padding-inline: 20px;
+    border: solid black 2px;
+    border-radius: 2px;
+    background-color: rgb(227, 198, 254);
+    margin-left: auto;
+}
+.follow-button:active {
+    background-color: rgb(193, 156, 228);
+}
+.follow-button.followed {
+    background-color: rgb(191, 208, 248);
+
+}
 .user-container {
+    display: flex;
+    align-items: center;
     max-width: 90%;
     margin-inline: auto;
     margin-block: 20px;

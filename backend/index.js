@@ -11,8 +11,8 @@ import {rateLimit} from 'express-rate-limit';
 
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
-    getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists,
-    getTotalPostsNumber, updateBio, addFollower, removeFollower, getFollowers, getFollowings, getFollowerFeed
+    getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber, updateBio,
+    addFollower, removeFollower, getFollowers, getFollowings, getFollowerFeed, followExists
 } from './database.js';
 import { type } from 'os';
 
@@ -266,6 +266,34 @@ app.post('/api/users/:username/bio', async (req, res) => {
     } else {
         res.send('Updated bio');
     }
+});
+app.post('/api/users/id/:id/follows', requireUserAuth, async (req, res) => {
+    req.params.id = Number(req.params.id);
+    if (req.userId === req.params.id) {res.status(400).send('Cannot follow yourself'); return;}
+    const result = await addFollower(req.userId, req.params.id);
+    if (result === 200) {
+        res.send('Followed user');
+    } else {
+        let code = result.code;
+        if (code === 'ER_DUP_ENTRY') {
+            res.send('User is already followed');
+        } else {
+            console.log(err);
+            res.status(400).send('Error following user');
+        }
+    }
+});
+app.delete('/api/users/id/:id/follows', requireUserAuth, async (req, res) => {
+    const result = await removeFollower(req.userId, req.params.id);
+    if (result) {
+        res.send('Unfollowed user');
+    } else {
+        res.status(400).send('Could not unfollow user');
+    }
+});
+app.get('/api/users/id/:followed/follows/:follower', async (req, res) => {
+    const result = await followExists(req.params.followed, req.params.follower);
+    res.json({following: result});
 })
 app.post('/api/posts/:id/loves', requireUserAuth, async (req, res) => {
     const result = await addLove(req.params.id, req.userId);
