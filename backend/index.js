@@ -267,7 +267,18 @@ app.post('/api/users/:username/bio', async (req, res) => {
     }
 });
 
-const maxUsersPerPage = 1;
+const maxUsersPerPage = 21;
+
+app.get('/users/:username/followers', async (req, res) => {
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+
+    const followers = await getFollowers(req.params.username, maxUsersPerPage, (page-1)*maxUsersPerPage);
+
+    const viewingUser = await safeGetUserByUsername(req.params.username);
+
+    res.render('followers', {title: `${req.params.username}'s followers`, maxPages: Math.ceil(viewingUser.followers/maxUsersPerPage), followers: followers, viewingUser: viewingUser, user: req.user, page: page});
+})
 
 app.get('/api/users/:username/followers', async (req, res) => {
     let page = Number(req.query.page);

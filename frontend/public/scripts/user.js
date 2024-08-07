@@ -36,6 +36,7 @@ fetch(`/api/users/id/${user.userId}/follows/${viewingUser.user_id}`).then((resul
 
 });
 
+const followerStat = document.querySelector('.followers-stat');
 if (followButton) {
     followButton.addEventListener('click', async () => {
         let following = followButton.getAttribute('class') === 'follow-button followed'
@@ -56,9 +57,11 @@ if (followButton) {
             if (following === false) {
                 followButton.textContent = 'Following';
                 followButton.setAttribute('class', 'follow-button followed');
+                followerStat.textContent++;
             } else {
                 followButton.textContent = 'Follow';
                 followButton.setAttribute('class', 'follow-button');
+                followerStat.textContent--;
             }
         } else {
             createErrorElement(response);

@@ -22,9 +22,15 @@
                     <% } %>
                 <% } %>
             </div>
-            <% if (viewingUser.user_id !== user.userId && user.userId) { %>
-                <button class="follow-button">Follow</button>
-            <% } %>
+            <div class="user-page-right">
+                <% if (viewingUser.user_id !== user.userId && user.userId) { %>
+                    <button class="follow-button">Follow</button>
+                <% } %>
+                <a href="/users/<%=viewingUser.username%>/followers" class="followers-link unstyled-link">
+                    <span class='followers-stat'><%=viewingUser.followers%></span>
+                    <span> followers</span>
+                </a>
+            </div>
         </div>
         <h1 class="user-posts-header">@<%=viewingUser.username%>'s posts:</h1>
 

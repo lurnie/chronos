@@ -183,7 +183,7 @@ async function unsafeGetUserByUsername(username) {
 async function safeGetUserById(userId) {
     if (userId === undefined) {return 400;}
     try {
-        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, bio, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE user_id = ?', [userId]);
+        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, bio, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts, (SELECT COUNT(*) FROM follow WHERE follow.followed_id = user.user_id) AS followers FROM user WHERE user_id = ?', [userId]);
         return result[0];
     } catch (err) {
         console.log(err);
@@ -193,7 +193,7 @@ async function safeGetUserById(userId) {
 async function safeGetUserByUsername(username) {
     if (username === undefined) {return 400;}
     try {
-        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, bio, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts FROM user WHERE username = ?', [username]);
+        const [result] = await pool.query('SELECT user_id, username, admin_privileges, date_created, bio, (SELECT COUNT(*) FROM post WHERE post.user_id = user.user_id) AS posts, (SELECT COUNT(*) FROM follow WHERE follow.followed_id = user.user_id) AS followers FROM user WHERE username = ?', [username]);
         return result[0];
     } catch (err) {
         console.log(err);
