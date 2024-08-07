@@ -9,8 +9,8 @@ To self-host, you need to download the repository. Then, navigate to the directo
 ## Todo
 - [x] Make posts be spread over multiple pages
 - [x] Add user bio
+- [x] Add following and feed
 - [ ] Add profile pictures
-- [ ] Add following and feed
 - [ ] Add notifications
 - [ ] Add proper home screen
 - [ ] Add editing posts
