@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<%- include('./partials/head.ejs') %>
+
+<body>
+    <%- include('./partials/nav.ejs') %>
+    <h1><%=viewingUser.username%> | following (<%=viewingUser.following%>) </h1>
+
+    <%- include('./partials/user-grid.ejs', {users: following})%>
+
+    <%- include('./partials/page-nav.ejs', {url: `/users/${viewingUser.username}/following`}) %>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<% if (users.length > 0) { %>
+    <div class="user-grid">
+        <% for (let user of users) { %>
+            <a href="/users/<%=user.username%>" class="user-block unstyled-link"><%=user.username %></a>
+        <% } %>
+    </div>
+<% } %>

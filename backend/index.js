@@ -278,7 +278,17 @@ app.get('/users/:username/followers', async (req, res) => {
     const viewingUser = await safeGetUserByUsername(req.params.username);
 
     res.render('followers', {title: `${req.params.username}'s followers`, maxPages: Math.ceil(viewingUser.followers/maxUsersPerPage), followers: followers, viewingUser: viewingUser, user: req.user, page: page});
-})
+});
+app.get('/users/:username/following', async (req, res) => {
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+
+    const following = await getFollowings(req.params.username, maxUsersPerPage, (page-1)*maxUsersPerPage);
+
+    const viewingUser = await safeGetUserByUsername(req.params.username);
+
+    res.render('following', {title: `${req.params.username} | following`, maxPages: Math.ceil(viewingUser.following/maxUsersPerPage), following: following, viewingUser: viewingUser, user: req.user, page: page});
+});
 
 app.get('/api/users/:username/followers', async (req, res) => {
     let page = Number(req.query.page);

@@ -6,13 +6,7 @@
     <%- include('./partials/nav.ejs') %>
     <h1><%=viewingUser.username%>'s followers (<%=viewingUser.followers%>) </h1>
 
-    <% if (followers.length > 0) { %>
-        <div class="user-grid">
-            <% for (let follower of followers) { %>
-                <a href="/users/<%=follower.username%>" class="user-block unstyled-link"><%=follower.username %></a>
-            <% } %>
-        </div>
-    <% } %>
+    <%- include('./partials/user-grid.ejs', {users: followers})%>
 
     <%- include('./partials/page-nav.ejs', {url: `/users/${viewingUser.username}/followers`}) %>
 </body>
