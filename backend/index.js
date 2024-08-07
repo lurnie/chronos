@@ -266,6 +266,14 @@ app.post('/api/users/:username/bio', async (req, res) => {
         res.send('Updated bio');
     }
 });
+app.get('/api/users/:username/followers', async (req, res) => {
+    const result = await getFollowers(req.params.username);
+    res.json(result);
+});
+app.get('/api/users/:username/following', async (req, res) => {
+    const result = await getFollowings(req.params.username);
+    res.json(result);
+});
 app.post('/api/users/id/:id/follows', requireUserAuth, async (req, res) => {
     req.params.id = Number(req.params.id);
     if (req.userId === req.params.id) {res.status(400).send('Cannot follow yourself'); return;}

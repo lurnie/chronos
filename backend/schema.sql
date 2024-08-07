@@ -40,8 +40,8 @@ CREATE TABLE love (
 );
 CREATE TABLE follow (
     follower_id INT,
-    following_id INT,
+    followed_id INT,
     FOREIGN KEY (follower_id) REFERENCES user(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (following_id) REFERENCES user(user_id) ON DELETE CASCADE,
-    PRIMARY KEY(follower_id, following_id)
+    FOREIGN KEY (followed_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    PRIMARY KEY(follower_id, followed_id)
 );

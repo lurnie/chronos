@@ -55,36 +55,37 @@ async function getTotalPostsNumber() {
     return posts;
 }
 
-async function followExists(followerId, followingId) {
-    const result = await pool.query('SELECT * FROM follow WHERE follower_id = ? AND following_id = ?', [followerId, followingId]);
+async function followExists(followerId, followedId) {
+    const result = await pool.query('SELECT * FROM follow WHERE follower_id = ? AND followed_id = ?', [followerId, followedId]);
     if (result[0].length > 0) {return true;} else {return false;}
 }
 
-async function addFollower(followerId, followingId) {
+async function addFollower(followerId, followedId) {
     try {
-        await pool.query('INSERT INTO follow(follower_id, following_id) VALUES(?, ?)', [followerId, followingId]);
+        await pool.query('INSERT INTO follow(follower_id, followed_id) VALUES(?, ?)', [followerId, followedId]);
         return 200;
     } catch (err) {
         return err;
     }
 }
-async function removeFollower(followerId, followingId) {
+async function removeFollower(followerId, followedId) {
     try {
-        await pool.query('DELETE FROM follow WHERE follower_id = ? AND following_id = ?', [followerId, followingId]);
+        await pool.query('DELETE FROM follow WHERE follower_id = ? AND followed_id = ?', [followerId, followedId]);
         return true;
     } catch (err) {
         console.log(err);
         return false;
     }
 }
-async function getFollowings(userId) {
+async function getFollowings(username) {
     // the people the specified user is following
-    const [results] = await pool.query('SELECT following_id AS user_id FROM follow WHERE follower_id = ?', [userId]);
+    const [results] = await pool.query('SELECT followed_id, user.username FROM follow JOIN user ON followed_id = user.user_id WHERE follower_id IN (SELECT user.user_id FROM user WHERE user.username = ?)', [username]);
     return results;
 }
-async function getFollowers(userId) {
+async function getFollowers(username) {
     // the people following the specified user
-    const [results] = await pool.query('SELECT follower_id AS user_id FROM follow WHERE following_id = ?', [userId]);
+    const [results] = await pool.query('SELECT follower_id, user.username FROM follow JOIN user ON follower_id = user.user_id WHERE followed_id IN (SELECT user.user_id FROM user WHERE user.username = ?)', [username]);
+    console.log(results)
     return results;
 }
 
@@ -95,12 +96,12 @@ async function getAllPosts(limit=10, offset=0) {
 }
 
 async function getFollowerFeed(userId, limit=10, offset=0) {
-    const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, (SELECT COUNT(*) FROM love WHERE post.post_id = love.post_id) AS loves, (SELECT COUNT(*) FROM comment WHERE post.post_id = comment.post_id) AS comments FROM post JOIN user ON post.user_id = user.user_id WHERE post.user_id IN (SELECT following_id FROM follow WHERE follower_id = ?) ORDER BY post.date_created DESC LIMIT ? OFFSET ?`, [userId, limit, offset]);
+    const [results] = await pool.query(`SELECT post.post_id, contents, post.date_created, post.user_id, user.username, (SELECT COUNT(*) FROM love WHERE post.post_id = love.post_id) AS loves, (SELECT COUNT(*) FROM comment WHERE post.post_id = comment.post_id) AS comments FROM post JOIN user ON post.user_id = user.user_id WHERE post.user_id IN (SELECT followed_id FROM follow WHERE follower_id = ?) ORDER BY post.date_created DESC LIMIT ? OFFSET ?`, [userId, limit, offset]);
     return results;
 }
 
 async function getFeedSize(userId) {
-    const [[{results}]] = await pool.query(`SELECT COUNT(*) AS results FROM post WHERE post.user_id IN (SELECT following_id FROM follow WHERE follower_id = ?)`, [userId]);
+    const [[{results}]] = await pool.query(`SELECT COUNT(*) AS results FROM post WHERE post.user_id IN (SELECT followed_id FROM follow WHERE follower_id = ?)`, [userId]);
     return results;
 }
 
