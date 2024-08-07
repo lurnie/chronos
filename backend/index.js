@@ -266,12 +266,21 @@ app.post('/api/users/:username/bio', async (req, res) => {
         res.send('Updated bio');
     }
 });
+
+const maxUsersPerPage = 1;
+
 app.get('/api/users/:username/followers', async (req, res) => {
-    const result = await getFollowers(req.params.username);
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+
+    const result = await getFollowers(req.params.username, maxUsersPerPage, (page-1)*maxUsersPerPage);
     res.json(result);
 });
 app.get('/api/users/:username/following', async (req, res) => {
-    const result = await getFollowings(req.params.username);
+    let page = Number(req.query.page);
+    if (isNaN(page) || page < 1) {page = 1;}
+
+    const result = await getFollowings(req.params.username, maxUsersPerPage, (page-1)*maxUsersPerPage);
     res.json(result);
 });
 app.post('/api/users/id/:id/follows', requireUserAuth, async (req, res) => {
