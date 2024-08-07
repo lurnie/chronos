@@ -88,7 +88,6 @@ h1 {
     padding: 30px;
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     margin-inline: auto;
     width: 80%;
     background-color: rgb(211, 211, 240);
@@ -96,7 +95,15 @@ h1 {
 
     border-radius: 2px;
     box-shadow: 0 0 3px 1px rgb(118, 118, 215);
+
+    @media only screen and (min-width: 600px) {
+        grid-template-columns: repeat(4, minmax(150px, 1fr));
+    }
 }
+
+
+
+
 .user-block {
     padding: 10px;
     box-shadow: 0 0 3px 1px grey;
