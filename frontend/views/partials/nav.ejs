@@ -7,7 +7,10 @@
 
             <li class="nav-element nav-link" id="logout">Log Out</li>
 
-            <a class="nav-link nav-element nav-username" id="username" href="/users/<%=user.username%>"><%=user.username%></a>
+            <a class="nav-link nav-element nav-username" id="username" href="/users/<%=user.username%>">
+                <img class="avatar nav-avatar" src="/uploads/default.png">
+                <%=user.username%>
+            </a>
             <span class="website-name">Chronos</span>
         </ul>
 

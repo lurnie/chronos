@@ -426,6 +426,7 @@ h1 {
         justify-content: space-around;
         list-style-type: none;
         margin: 0;
+        align-items: center;
 
         .nav-element {
             transition-duration: 0.3s;
@@ -457,11 +458,17 @@ h1 {
         }
     }
 }
-
-.nav-username {
+.nav-avatar {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+}
+.nav-link.nav-username {
     padding: 16px;
     color: black;
     user-select: none;
+    display: flex;
+    align-items: center;
 }
 .nav-link {
     padding: 16px;
