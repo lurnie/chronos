@@ -402,10 +402,10 @@ h1 {
 }
 .post-user-box {
     margin-bottom: 15px;
-    padding-bottom: 5px;
     padding-right: 5px;
 }
 .bottom-border {
+    padding-bottom: 5px;
     border-bottom: solid rgb(175, 174, 174) 2px;
 }
 .post-username::before {

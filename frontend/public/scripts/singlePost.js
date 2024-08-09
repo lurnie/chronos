@@ -122,10 +122,21 @@ function createReplyElement(id, contents, username, timestamp) {
     const usernameElement = document.createElement('div');
     usernameElement.setAttribute('class', 'post-username');
     usernameElement.textContent = username;
+
+    const avatar = document.createElement('img');
+    avatar.setAttribute('src', '/uploads/default.png');
+    avatar.setAttribute('class', 'avatar small-avatar');
+
+    const userBox = document.createElement('div');
+    userBox.setAttribute('class', 'small-user-box post-user-box bottom-border');
+
+    userBox.append(avatar);
+    userBox.append(usernameElement);
+
     const usernameLink = document.createElement('a');
     usernameLink.setAttribute('href', `/users/${username}`);
     usernameLink.setAttribute('class', 'username-link');
-    usernameLink.append(usernameElement);
+    usernameLink.append(userBox);
 
     const dropdown = document.createElement('div');
     dropdown.setAttribute('class', 'dropdown');
