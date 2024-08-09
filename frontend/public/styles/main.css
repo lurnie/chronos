@@ -8,6 +8,19 @@ body {
 h1 {
     margin: 5px;
 }
+
+.profile-avatar {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+}
+
+.small-avatar {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+}
+
 .stat {
     margin-inline: 5px;
 }
@@ -101,9 +114,6 @@ h1 {
     }
 }
 
-
-
-
 .user-block {
     padding: 10px;
     box-shadow: 0 0 3px 1px grey;
@@ -140,15 +150,28 @@ h1 {
     margin-block: 20px;
     background-color: rgb(239, 239, 239);
     border: solid 2px grey;
-    padding: 20px 40px;
+    padding: 20px 30px;
+}
+.user-username-box {
+    display: flex;
+    align-items: center;
 }
 .user-username {
-    font-size: 120%;
+    font-size: 130%;
+    display: inline-block;
 }
 .user-info {
     color: grey;
     font-style: italic;
     margin-top: 5px;
+}
+.admin-square {
+    height: 8px;
+    width: 8px;
+    background-color: red;
+    display: inline-block;
+    margin-left: 10px;
+    border-radius: 50%;
 }
 .user-bio {
     margin-top: 10px;
@@ -372,9 +395,17 @@ h1 {
 .post-user-input:focus {
     outline: none;
 }
-.post-username {
+.small-user-box {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+}
+.post-user-box {
     margin-bottom: 15px;
     padding-bottom: 5px;
+    padding-right: 5px;
+}
+.bottom-border {
     border-bottom: solid rgb(175, 174, 174) 2px;
 }
 .post-username::before {

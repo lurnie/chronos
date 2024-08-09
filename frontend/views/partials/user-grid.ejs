@@ -1,7 +1,12 @@
 <% if (users.length > 0) { %>
     <div class="user-grid">
         <% for (let user of users) { %>
-            <a href="/users/<%=user.username%>" class="user-block unstyled-link"><%=user.username %></a>
+            <a href="/users/<%=user.username%>" class="user-block unstyled-link">
+                <div class="small-user-box">
+                    <img class="avatar small-avatar" src="/uploads/default.png">
+                    <%=user.username %>
+                </div>
+            </a>
         <% } %>
     </div>
 <% } %>
