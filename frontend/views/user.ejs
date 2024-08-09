@@ -28,7 +28,7 @@
                 <div class="user-info user-joined">Joined <%=getDateString(viewingUser.date_created)%></div>
 
                 <% if (viewingUser.username === user.username) { %>
-                    <input type="text" autocomplete="off" class="user-bio" value="<%=viewingUser.bio%>"></input>
+                    <input type="text" autocomplete="off" class="user-bio" maxlength="100" value="<%=viewingUser.bio%>"></input>
                 <% } else { %>
                     <% if (viewingUser.bio) { %>
                         <div class="user-info"><%=viewingUser.bio%></div>

@@ -189,6 +189,9 @@ h1 {
     border: blue 2px solid;
     outline: none;
 }
+input.user-bio {
+    width: 750px;
+}
 
 .dropdown {
     display: inline-block;
