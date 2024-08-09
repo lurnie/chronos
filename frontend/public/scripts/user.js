@@ -69,3 +69,12 @@ if (followButton) {
         }
     })
 }
+
+const avatarInput = document.querySelector('#avatar');
+const avatarForm = document.querySelector('#avatar-form');
+if (avatarInput) {
+    avatarInput.addEventListener('change', () => {
+        console.log(avatarInput.files[0]);
+        avatarForm.submit();
+    });
+}

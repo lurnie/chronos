@@ -8,7 +8,15 @@
         <script>let viewingUser = JSON.parse('<%-JSON.stringify(viewingUser)%>')</script>
 
         <div class="user-container">
-            <img class="avatar profile-avatar" src="/uploads/default.png">
+            <div>
+                <img class="avatar profile-avatar" src="/uploads/default.png">
+                <% if (viewingUser.username === user.username) { %>
+                <form action="/users/<%=viewingUser.username%>/avatar" enctype="multipart/form-data" method="post" id="avatar-form">
+                    <label for="avatar" class="avatar-change">Change</label>
+                    <input class="hidden" type="file" name="avatar" id="avatar" accept="image/*">
+                </form>
+            <% } %>
+            </div>
             <div>
                 <div class="user-username-box">
                     <span class="user-username">@<%=viewingUser.username%></span>

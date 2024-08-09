@@ -43,6 +43,7 @@ app.post('/api/posts/:id/comments', createRateLimit(5*60*1000, 15, 'You are post
 
 
 app.use(express.static(path + 'public'));
+app.use('/uploads', express.static('uploads'));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -259,13 +260,22 @@ app.post('/api/users/:username/bio', async (req, res) => {
     }
     const {bio} = req.body;
     const result = await updateBio(req.username, bio);
-    if (typeof(result) === 'Object') {
-        console.log(result);
-        res.status(400).send('Unable to update bio');
+    if (typeof(result) === 'object') {
+        let code = result.code;
+        if (code === 'ER_DATA_TOO_LONG') {
+            res.status(400).send('Bio cannot be longer than 100 characters');
+        } else {
+            res.status(400).send('Unable to update bio');
+        }
     } else {
         res.send('Updated bio');
     }
 });
+
+app.post('/users/:username/avatar', requireUserAuth, async (req, res) => {
+    if (req.username !== req.params.username) {res.status(401).send('You must be logged in as the right user.'); return;}
+    res.send('Updated avatar');
+})
 
 const maxUsersPerPage = 21;
 

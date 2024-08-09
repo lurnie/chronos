@@ -9,6 +9,12 @@ h1 {
     margin: 5px;
 }
 
+.avatar-change {
+    cursor: pointer;
+}
+.hidden {
+    display: none;
+}
 .profile-avatar {
     width: 60px;
     height: 60px;
