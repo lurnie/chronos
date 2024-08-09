@@ -22,22 +22,23 @@ if (bioInput) {
 }
 
 const followButton = document.querySelector('.follow-button');
-
-fetch(`/api/users/id/${user.userId}/follows/${viewingUser.user_id}`).then((result) => {
-    result.json().then((json) => {
-        if (json.following) {
-            followButton.textContent = 'Following';
-            followButton.setAttribute('class', 'follow-button followed');
-        } else {
-            followButton.textContent = 'Follow';
-            followButton.setAttribute('class', 'follow-button');
-        }
-    })
-
-});
-
 const followerStat = document.querySelector('.followers-stat');
+
 if (followButton) {
+    fetch(`/api/users/id/${user.userId}/follows/${viewingUser.user_id}`).then((result) => {
+        result.json().then((json) => {
+            if (json.following) {
+                followButton.textContent = 'Following';
+                followButton.setAttribute('class', 'follow-button followed');
+            } else {
+                followButton.textContent = 'Follow';
+                followButton.setAttribute('class', 'follow-button');
+            }
+        })
+
+    });
+
+
     followButton.addEventListener('click', async () => {
         let following = followButton.getAttribute('class') === 'follow-button followed'
         let method;
