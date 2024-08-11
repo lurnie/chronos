@@ -400,6 +400,8 @@ input.user-bio {
 }
 .post-user-input {
     margin-bottom: 10px;
+    max-height: 22em;
+    overflow: scroll;
 }
 .post-user-input:focus {
     outline: none;

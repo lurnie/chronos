@@ -19,6 +19,5 @@ To self-host, you need to download the repository. Then, navigate to the directo
 - [ ] Redesign parts of the website
 
 ## Bugs
-- Adding too many newlines in the post creation box makes the text go outside the box
 
 Please let me know if you find any bugs or security issues.
