@@ -80,27 +80,29 @@ document.querySelectorAll('.post').forEach((post) => {
     setLoveStatus(); // runs once on page load so that you don't have to scroll in order for the currently visible posts to check if they're loved or not
 
     const stats = loveButton.nextElementSibling;
-    loveButton.addEventListener('click', async () => {
-        const loved = (loveButton.getAttribute('class') === 'heart loved');
-        let method;
-        if (loved) {
-            method = 'DELETE';
-            loveButton.setAttribute('class', 'heart');
-        } else {
-            method = 'POST';
-            loveButton.setAttribute('class', 'heart loved');
+    if (user.userId) {
+        loveButton.addEventListener('click', async () => {
+            const loved = (loveButton.getAttribute('class') === 'heart loved');
+            let method;
+            if (loved) {
+                method = 'DELETE';
+                loveButton.setAttribute('class', 'heart');
+            } else {
+                method = 'POST';
+                loveButton.setAttribute('class', 'heart loved');
 
-        }
-        const response = await fetch(`/api/posts/${id}/loves`, {
-            method: method,
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8'
+            }
+            const response = await fetch(`/api/posts/${id}/loves`, {
+                method: method,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                }
+            });
+            if (response.ok) {
+                if (method === 'POST') {stats.textContent++;} else {stats.textContent--;} // automatically updates the like counter
+            } else {
+                createErrorElement(response);
             }
         });
-        if (response.ok) {
-            if (method === 'POST') {stats.textContent++;} else {stats.textContent--;} // automatically updates the like counter
-        } else {
-            createErrorElement(response);
-        }
-    });
+    }
 });
