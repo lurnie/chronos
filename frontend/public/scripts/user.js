@@ -74,7 +74,15 @@ const avatarInput = document.querySelector('#avatar');
 const avatarForm = document.querySelector('#avatar-form');
 if (avatarInput) {
     avatarInput.addEventListener('change', () => {
-        console.log(avatarInput.files[0]);
         avatarForm.submit();
+        /*
+        console.log(avatarInput.files[0]);
+        const data = new FormData(avatarForm);
+        fetch(`/users/${viewingUser.username}/avatar`, {
+            method: 'post',
+            data: data
+        }).then((response) => {
+            console.log(response);
+        });*/
     });
 }

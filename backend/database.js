@@ -79,12 +79,12 @@ async function removeFollower(followerId, followedId) {
 }
 async function getFollowings(username, limit=10, offset=0) {
     // the people the specified user is following
-    const [results] = await pool.query('SELECT followed_id, user.username FROM follow JOIN user ON followed_id = user.user_id WHERE follower_id IN (SELECT user.user_id FROM user WHERE user.username = ?) LIMIT ? OFFSET ?', [username, limit, offset]);
+    const [results] = await pool.query('SELECT followed_id AS user_id, user.username FROM follow JOIN user ON followed_id = user.user_id WHERE follower_id IN (SELECT user.user_id FROM user WHERE user.username = ?) LIMIT ? OFFSET ?', [username, limit, offset]);
     return results;
 }
 async function getFollowers(username, limit=10, offset=0) {
     // the people following the specified user
-    const [results] = await pool.query('SELECT follower_id, user.username FROM follow JOIN user ON follower_id = user.user_id WHERE followed_id IN (SELECT user.user_id FROM user WHERE user.username = ?) LIMIT ? OFFSET ?', [username, limit, offset]);
+    const [results] = await pool.query('SELECT follower_id AS user_id, user.username FROM follow JOIN user ON follower_id = user.user_id WHERE followed_id IN (SELECT user.user_id FROM user WHERE user.username = ?) LIMIT ? OFFSET ?', [username, limit, offset]);
     return results;
 }
 

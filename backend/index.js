@@ -9,6 +9,8 @@ import cookieParser from 'cookie-parser';
 
 import {rateLimit} from 'express-rate-limit';
 
+import multer from 'multer';
+
 import { getAllPosts, getPost, createPost, getComment, getCommentsFromParentComment, getCommentsFromPost, createComment,
     createUser, unsafeGetUserById, unsafeGetUserByUsername, getSession, setSession, deleteSession, deletePost, deleteComment, safeGetUserById, safeGetUserByUsername,
     getPostsByUsername, addLove, getLovesByPost, getLovesByUserId, getLovesByUsername, deleteLove, loveExists, getTotalPostsNumber, updateBio,
@@ -20,6 +22,18 @@ const app = express();
 const port = process.env.PORT;
 
 const path = '../frontend/';
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/avatar/')
+    },
+    filename: (req, file, cb) => {
+        console.log(file);
+
+        cb(null, String(req.userId));
+    }
+});
+const upload = multer({storage: storage});
 
 app.set('view engine', 'ejs')
 app.set('views', path + 'views');
@@ -272,7 +286,7 @@ app.post('/api/users/:username/bio', async (req, res) => {
     }
 });
 
-app.post('/users/:username/avatar', requireUserAuth, async (req, res) => {
+app.post('/users/:username/avatar', upload.single('avatar'), async (req, res) => {
     if (req.username !== req.params.username) {res.status(401).send('You must be logged in as the right user.'); return;}
     res.send('Updated avatar');
 })

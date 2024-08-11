@@ -3,7 +3,7 @@
         <% for (let user of users) { %>
             <a href="/users/<%=user.username%>" class="user-block unstyled-link">
                 <div class="small-user-box">
-                    <img class="avatar small-avatar" src="/uploads/default.png">
+                    <img class="avatar small-avatar" src="/uploads/avatar/<%=user.user_id%>">
                     <%=user.username %>
                 </div>
             </a>

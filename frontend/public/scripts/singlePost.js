@@ -43,7 +43,7 @@ function makeSendReplyButtonFunctional(replyBox, parent=null) {
         if (response.ok) {
             input.textContent = '';
             let json = await response.json();
-            const newComment = createReplyElement(json.comment_id, json.contents, json.username, json.date_created);
+            const newComment = createReplyElement(json.comment_id, json.contents, json.username, json.date_created, json.user_id);
             if (json.parent_comment === null) {
                 commentContainer.insertBefore(newComment, upperReplyBox.nextSibling);
             } else {
@@ -105,7 +105,7 @@ function createReplyBox(parent, canDelete=true) {
     return outerWrapper;
 }
 
-function createReplyElement(id, contents, username, timestamp) {
+function createReplyElement(id, contents, username, timestamp, userId) {
     // TODO: put this in a separate file or combine it with the post creation code?
     const box = document.createElement('div');
     box.setAttribute('class', 'reply');
@@ -124,7 +124,7 @@ function createReplyElement(id, contents, username, timestamp) {
     usernameElement.textContent = username;
 
     const avatar = document.createElement('img');
-    avatar.setAttribute('src', '/uploads/default.png');
+    avatar.setAttribute('src', `/uploads/avatar/${userId}`);
     avatar.setAttribute('class', 'avatar small-avatar');
 
     const userBox = document.createElement('div');
@@ -211,7 +211,8 @@ makeSendReplyButtonFunctional(upperReplyBox);
 await getComments(post.post_id).then((comments) => {
     if (comments === undefined) {return;}
     for (let comment of comments) {
-        const reply = createReplyElement(comment.comment_id, comment.contents, comment.username, comment.date_created);
+        console.log(comment)
+        const reply = createReplyElement(comment.comment_id, comment.contents, comment.username, comment.date_created, comment.user_id);
 
         if (comment.parent_comment === null) {
             commentContainer.insertBefore(reply, upperReplyBox.nextSibling);

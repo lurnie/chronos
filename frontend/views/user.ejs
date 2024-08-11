@@ -9,7 +9,7 @@
 
         <div class="user-container">
             <div>
-                <img class="avatar profile-avatar" src="/uploads/default.png">
+                <img class="avatar profile-avatar" src="/uploads/avatar/<%=viewingUser.user_id%>">
                 <% if (viewingUser.username === user.username) { %>
                 <form action="/users/<%=viewingUser.username%>/avatar" enctype="multipart/form-data" method="post" id="avatar-form">
                     <label for="avatar" class="avatar-change">Change</label>
