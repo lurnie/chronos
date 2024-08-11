@@ -307,7 +307,7 @@ input.user-bio {
     white-space: pre-wrap;
 }
 .comment-content {
-    max-height: 40em;
+    max-height: 22em;
     overflow: scroll;
     display: block;
 }
