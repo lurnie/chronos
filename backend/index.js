@@ -23,17 +23,29 @@ const port = process.env.PORT;
 
 const path = '../frontend/';
 
+const maxAvatarSize = 500 * 1000; // 500KB
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/avatar/')
     },
     filename: (req, file, cb) => {
-        console.log(file);
-
         cb(null, String(req.userId));
     }
 });
-const upload = multer({storage: storage});
+
+function fileFilter(req, file, cb) {
+    if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg') {
+        cb(new Error('Only PNG and JPG/JPEG files are allowed'), false); return;
+    }
+
+    // only setting the max file size as a limit in the multer function causes the original image to be deleted if it fails, so it first gets checked here so that it won't delete the image
+    const fileSize = parseInt(req.headers['content-length']);
+    if (fileSize > maxAvatarSize) {cb(new Error('File too large'), false); return;}
+
+    cb(null, true);
+}
+const avatarUpload = multer({limits: {fileSize: maxAvatarSize}, storage: storage, fileFilter: fileFilter}).single('avatar');
 
 app.set('view engine', 'ejs')
 app.set('views', path + 'views');
@@ -286,10 +298,19 @@ app.post('/api/users/:username/bio', async (req, res) => {
     }
 });
 
-app.post('/users/:username/avatar', upload.single('avatar'), async (req, res) => {
+app.post('/users/:username/avatar', requireUserAuth, async (req, res, next) => {
     if (req.username !== req.params.username) {res.status(401).send('You must be logged in as the right user.'); return;}
-    res.send('Updated avatar');
-})
+    avatarUpload(req, res, (err) => {
+        if (err instanceof multer.MulterError) {res.status(400).send('Error uploading avatar.')} else
+        if (err) {
+            const message = err.message;
+            if (message === 'File too large' || message === 'Only PNG and JPG/JPEG files are allowed') {res.status(400).send(message);}
+            else {res.status(400).send('Error uploading avatar');}
+        } else {
+            res.send('Updated avatar');
+        }
+    });
+});
 
 const maxUsersPerPage = 21;
 
