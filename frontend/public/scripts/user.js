@@ -73,16 +73,17 @@ if (followButton) {
 const avatarInput = document.querySelector('#avatar');
 const avatarForm = document.querySelector('#avatar-form');
 if (avatarInput) {
-    avatarInput.addEventListener('change', () => {
-        avatarForm.submit();
-        /*
-        console.log(avatarInput.files[0]);
+    avatarInput.addEventListener('change', async () => {
         const data = new FormData(avatarForm);
-        fetch(`/users/${viewingUser.username}/avatar`, {
-            method: 'post',
-            data: data
-        }).then((response) => {
-            console.log(response);
-        });*/
+        const response = await fetch(`/users/${viewingUser.username}/avatar`, {
+            method: 'POST',
+            body: data
+        });
+        if (response.ok) {
+            // TODO: find a way to just reload the image, rather than the whole page
+            location.reload();
+        } else {
+            createErrorElement(response);
+        }
     });
 }
