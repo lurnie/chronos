@@ -298,7 +298,10 @@ app.post('/api/users/:username/bio', async (req, res) => {
     }
 });
 
-app.post('/users/:username/avatar', requireUserAuth, async (req, res, next) => {
+app.get('/api/users/:username/avatar', async (req, res) => {
+});
+
+app.post('/api/users/:username/avatar', requireUserAuth, async (req, res) => {
     if (req.username !== req.params.username) {res.status(401).send('You must be logged in as the right user.'); return;}
     avatarUpload(req, res, (err) => {
         if (err instanceof multer.MulterError) {res.status(400).send('Error uploading avatar.')} else

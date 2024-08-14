@@ -22,9 +22,9 @@ h1 {
     margin-inline: auto;
 }
 .avatar-modal {
-    width: 50%;
+    width: 33%;
     max-height: 30em;
-    margin: 30px;
+    margin: 90px;
     margin-inline: auto;
     padding: 20px;
     background-color: rgb(239, 239, 239);
@@ -218,7 +218,7 @@ h1 {
     outline: none;
 }
 input.user-bio {
-    width: 750px;
+    width: 50vw;
 }
 
 .dropdown {

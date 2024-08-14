@@ -84,7 +84,7 @@ cancelButton.addEventListener('click', () => {
 
 saveButton.addEventListener('click', async () => {
     const data = new FormData(avatarForm);
-    const response = await fetch(`/users/${viewingUser.username}/avatar`, {
+    const response = await fetch(`/api/users/${viewingUser.username}/avatar`, {
         method: 'POST',
         body: data
     });
