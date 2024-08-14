@@ -7,6 +7,16 @@
         <%- include('./functions/getDateString.ejs') %>
         <script>let viewingUser = JSON.parse('<%-JSON.stringify(viewingUser)%>')</script>
 
+        <dialog class="avatar-modal">
+            <div class="avatar-modal-contents">
+                <img class="avatar avatar-preview">
+            </div>
+            <div class="modal-button-container">
+                <button id="cancel" class="user-button">Cancel</button>
+                <button id="save" class="user-button">Save</button>
+            </div>
+        </dialog>
+
         <div class="user-container">
             <div>
                 <img class="avatar profile-avatar" src="/uploads/avatar/<%=viewingUser.user_id%>">

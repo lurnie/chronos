@@ -72,18 +72,36 @@ if (followButton) {
 
 const avatarInput = document.querySelector('#avatar');
 const avatarForm = document.querySelector('#avatar-form');
+const avatarModal = document.querySelector('.avatar-modal');
+const cancelButton = document.querySelector('#cancel');
+const saveButton = document.querySelector('#save');
+const avatarPreview = document.querySelector('.avatar-preview');
+
+
+cancelButton.addEventListener('click', () => {
+    avatarModal.close();
+});
+
+saveButton.addEventListener('click', async () => {
+    const data = new FormData(avatarForm);
+    const response = await fetch(`/users/${viewingUser.username}/avatar`, {
+        method: 'POST',
+        body: data
+    });
+    if (response.ok) {
+        // TODO: find a way to just reload the image, rather than the whole page
+        location.reload();
+    } else {
+        createErrorElement(response);
+    }
+    avatarModal.close();
+})
+
 if (avatarInput) {
     avatarInput.addEventListener('change', async () => {
-        const data = new FormData(avatarForm);
-        const response = await fetch(`/users/${viewingUser.username}/avatar`, {
-            method: 'POST',
-            body: data
-        });
-        if (response.ok) {
-            // TODO: find a way to just reload the image, rather than the whole page
-            location.reload();
-        } else {
-            createErrorElement(response);
-        }
+        const file = avatarInput.files[0];
+        avatarPreview.src = URL.createObjectURL(file);
+
+        avatarModal.showModal();
     });
 }
