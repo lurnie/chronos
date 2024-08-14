@@ -336,7 +336,8 @@ input.user-bio {
 }
 .comment-content {
     max-height: 22em;
-    overflow: scroll;
+    overflow: auto;
+    scrollbar-width: thin;
     display: block;
 }
 .username-link {
@@ -403,7 +404,8 @@ input.user-bio {
     white-space: pre-wrap;
     display: block;
     max-height: 22em;
-    overflow: scroll;
+    overflow: auto;
+    scrollbar-width: thin;
 }
 .post-date {
     margin-top: 10px;
@@ -429,7 +431,8 @@ input.user-bio {
 .post-user-input {
     margin-bottom: 10px;
     max-height: 22em;
-    overflow: scroll;
+    overflow: auto;
+    scrollbar-width: thin;
 }
 .post-user-input:focus {
     outline: none;
