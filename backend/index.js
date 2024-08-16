@@ -65,11 +65,12 @@ function createRateLimit(ms, limit, message) {
 app.use('/api/join', createRateLimit(60*60*1000, 10, 'You can only create 5 accounts in one hour'));
 app.post('/api/posts', createRateLimit(3*60*1000, 8, 'You are posting too much'));
 app.post('/api/posts/:id/comments', createRateLimit(5*60*1000, 15, 'You are posting too many comments'));
+app.post('/api/uploads/', createRateLimit(60*60*1000, 1, 'You are posting too many comments'));
 
 
 
 app.use(express.static(path + 'public'));
-app.use('/uploads', express.static('uploads'));
+app.use('/api/uploads', express.static('uploads'));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -298,8 +299,6 @@ app.post('/api/users/:username/bio', async (req, res) => {
     }
 });
 
-app.get('/api/users/:username/avatar', async (req, res) => {
-});
 
 app.post('/api/users/:username/avatar', requireUserAuth, async (req, res) => {
     if (req.username !== req.params.username) {res.status(401).send('You must be logged in as the right user.'); return;}
