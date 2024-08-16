@@ -8,7 +8,7 @@
             <li class="nav-element nav-link" id="logout">Log Out</li>
 
             <a class="nav-link nav-element nav-username" id="username" href="/users/<%=user.username%>">
-                <img class="avatar nav-avatar" src="/api/uploads/avatar/<%=user.userId%>">
+                <img class="avatar nav-avatar" src="/api/uploads/avatar/<%=user.userId%>" onerror="this.onerror = null; this.src = '/api/uploads/default.png';">
                 <%=user.username%>
             </a>
             <span class="website-name">Chronos</span>

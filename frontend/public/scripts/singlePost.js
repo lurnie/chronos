@@ -124,8 +124,12 @@ function createReplyElement(id, contents, username, timestamp, userId) {
     usernameElement.textContent = username;
 
     const avatar = document.createElement('img');
-    avatar.setAttribute('src', `/uploads/avatar/${userId}`);
+    avatar.setAttribute('src', `/api/uploads/avatar/${userId}`);
     avatar.setAttribute('class', 'avatar small-avatar');
+    avatar.onerror = () => {
+        avatar.onerror = null;
+        avatar.src = '/api/uploads/default.png';
+    }
 
     const userBox = document.createElement('div');
     userBox.setAttribute('class', 'small-user-box post-user-box bottom-border');
