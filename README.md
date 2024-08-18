@@ -10,7 +10,7 @@ To self-host, you need to download the repository. Then, navigate to the directo
 - [x] Make posts be spread over multiple pages
 - [x] Add user bio
 - [x] Add following and feed
-- [ ] Add profile pictures
+- [x] Add profile pictures
 - [ ] Add notifications
 - [ ] Add proper home screen
 - [ ] Add editing posts
