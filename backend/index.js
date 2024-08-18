@@ -118,7 +118,8 @@ function isAllowedString(string) {
             (code > 47 && code < 58) || // 0-9
             (code > 64 && code < 91) || // A-Z
             (code > 96 && code < 123) || // a-z
-            (code === 95)
+            (code === 95) || // underscore _
+            (code === 45) // hyphen -
         )) {return false;}
     }
     return true;
