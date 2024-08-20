@@ -97,25 +97,45 @@ h1 {
     margin-inline: auto;
     font-size: 150%;
 }
-.error-x-button {
+.x-button {
     border-radius: 10px;
     border: none;
     margin: 10px;
-    background: rgb(255, 89, 56);
     transition: 0.1s;
     padding: 2px;
     font-size: 110%;
 }
-.error-x-button:hover {
-    background-color: rgb(190, 0, 0);
-}
-.error-header {
-    background-color: rgb(255, 169, 146);
-    border: solid 2px rgb(203, 68, 41);
+
+.message {
     padding: 10px;
     position: fixed;
     top: 20vh;
     margin: 20px;
+}
+
+.confirmation-box {
+    background-color: rgb(159, 255, 177);
+    border: solid 2px rgb(31, 145, 78);
+
+    .x-button {
+        background: rgb(4, 204, 0);
+    }
+    .x-button:hover {
+        background-color: rgb(17, 143, 0);
+    }
+}
+
+.error-box {
+    background-color: rgb(255, 169, 146);
+    border: solid 2px rgb(203, 68, 41);
+
+    .x-button {
+        background: rgb(255, 89, 56);
+
+    }
+    .x-button:hover {
+        background-color: rgb(190, 0, 0);
+    }
 }
 .user-posts-header {
     margin: 30px;
