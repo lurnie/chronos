@@ -1,4 +1,4 @@
-import { createErrorElement, createConfirmationElement } from "./error.js";
+import { createErrorElement, createConfirmationElement } from "./messages.js";
 
 const bioInput = document.querySelector('input.user-bio');
 if (bioInput) {

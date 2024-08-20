@@ -1,5 +1,5 @@
 import { getDateString } from "./getDateString.js";
-import { createErrorElement } from "./error.js";
+import { createErrorElement } from "./messages.js";
 
 const body = document.querySelector('body');
 let upperReplyBox = document.querySelector('.comment-input-container');

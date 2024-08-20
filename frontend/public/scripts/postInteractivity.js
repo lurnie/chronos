@@ -1,4 +1,4 @@
-import { createErrorElement } from "./error.js";
+import { createErrorElement } from "./messages.js";
 
 function isInView(element) {
     let rect = element.getBoundingClientRect();
