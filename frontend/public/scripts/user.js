@@ -1,4 +1,4 @@
-import { createErrorElement } from "./error.js";
+import { createErrorElement, createConfirmationElement } from "./error.js";
 
 const bioInput = document.querySelector('input.user-bio');
 if (bioInput) {
@@ -14,7 +14,7 @@ if (bioInput) {
         });
 
         if (response.ok) {
-
+            createConfirmationElement('Bio updated');
         } else {
             createErrorElement(response);
         }

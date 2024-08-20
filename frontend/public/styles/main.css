@@ -109,8 +109,9 @@ h1 {
 .message {
     padding: 10px;
     position: fixed;
-    top: 20vh;
+    top: 8vh;
     margin: 20px;
+    margin-left: 20%;
 }
 
 .confirmation-box {

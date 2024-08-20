@@ -1,7 +1,7 @@
 async function createErrorElement(response) {
     let errorText = await response.text();
     const error = await createMessageElement(`Error: ${errorText}`);
-    error.setAttribute('class', 'confirmation-box message');
+    error.setAttribute('class', 'error-box message');
     document.body.append(error);
 }
 
