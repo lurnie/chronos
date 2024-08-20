@@ -101,7 +101,8 @@ h1 {
     border-radius: 10px;
     border: none;
     margin: 10px;
-    background: red;
+    background: rgb(255, 89, 56);
+    transition: 0.1s;
     padding: 2px;
     font-size: 110%;
 }
