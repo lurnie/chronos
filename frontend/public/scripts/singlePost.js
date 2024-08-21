@@ -181,7 +181,7 @@ function createReplyElement(id, contents, username, timestamp, userId) {
 
     deleteButton.addEventListener('click', async () => {
         if (username !== user.username && !user.admin) {return;}
-        let confirmDelete = confirm('Are you sure you want to delete this post?');
+        let confirmDelete = confirm('Are you sure you want to delete this comment?');
         if (!confirmDelete) {return;}
         const response = await fetch(`/api/comments/${id}`, {
             method: 'DELETE',
