@@ -1,4 +1,4 @@
-import { createErrorElement } from "./error.js";
+import { createErrorElement } from "./messages.js";
 
 function addInput() {
     const inputPost = document.querySelector('.post.send-box');

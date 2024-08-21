@@ -1,4 +1,4 @@
-import { createErrorElement } from "./messages.js";
+import { createErrorElement, createConfirmationElement } from "./messages.js";
 
 function isInView(element) {
     let rect = element.getBoundingClientRect();
@@ -46,6 +46,7 @@ document.querySelectorAll('.post').forEach((post) => {
                 method: 'DELETE',
             });
             if (response.ok) {
+                createConfirmationElement('Post deleted');
                 dropdown.remove();
                 post.setAttribute('class', 'post deleted');
                 if (post.nextElementSibling) {post.nextElementSibling.style['margin-top'] = 0;}
