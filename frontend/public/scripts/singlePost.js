@@ -1,5 +1,5 @@
 import { getDateString } from "./getDateString.js";
-import { createErrorElement } from "./messages.js";
+import { createErrorElement, createConfirmationElement } from "./messages.js";
 
 const body = document.querySelector('body');
 let upperReplyBox = document.querySelector('.comment-input-container');
@@ -187,6 +187,7 @@ function createReplyElement(id, contents, username, timestamp, userId) {
             method: 'DELETE',
         });
         if (response.ok) {
+            createConfirmationElement('Comment deleted');
             dropdown.remove();
             replyButton.remove();
             box.setAttribute('class', 'reply deleted');
